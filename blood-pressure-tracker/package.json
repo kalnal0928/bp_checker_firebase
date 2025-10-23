@@ -2,7 +2,7 @@
   "name": "blood-pressure-tracker",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://github.com/kalnal0928/bp_checker_firebase.git",
+  "homepage": "https://kalnal0928.github.io/bp_checker_firebase",
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
