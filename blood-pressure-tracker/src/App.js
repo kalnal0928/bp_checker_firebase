@@ -3,13 +3,14 @@ import { db } from './firebase';
 import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import BloodPressureChart from './components/BloodPressureChart';
 import BloodPressureStats from './components/BloodPressureStats';
+import ScrollPicker from './components/ScrollPicker';
 import './App.css';
 
 function App() {
   const [bloodPressure, setBloodPressure] = useState([]);
-  const [systolic, setSystolic] = useState('');
-  const [diastolic, setDiastolic] = useState('');
-  const [pulse, setPulse] = useState('');
+  const [systolic, setSystolic] = useState(120);
+  const [diastolic, setDiastolic] = useState(80);
+  const [pulse, setPulse] = useState(70);
   const [recordDate, setRecordDate] = useState('');
   const [recordTime, setRecordTime] = useState('');
   const [editingId, setEditingId] = useState(null);
@@ -17,6 +18,8 @@ function App() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [connectionStatus, setConnectionStatus] = useState('checking');
+  const [userName, setUserName] = useState('');
+  const [currentUser, setCurrentUser] = useState('');
 
   const formatTimestamp = (timestamp) => {
     if (timestamp && typeof timestamp.toDate === 'function') {
@@ -44,13 +47,21 @@ function App() {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!currentUser) {
+        setBloodPressure([]);
+        return;
+      }
+      
       try {
         setLoading(true);
         setError(null);
         setConnectionStatus('checking');
         
         const querySnapshot = await getDocs(collection(db, 'blood_pressure'));
-        setBloodPressure(querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })));
+        const userData = querySnapshot.docs
+          .map(doc => ({ ...doc.data(), id: doc.id }))
+          .filter(item => item.userName === currentUser);
+        setBloodPressure(userData);
         setConnectionStatus('connected');
       } catch (err) {
         console.error('데이터 로딩 오류:', err);
@@ -65,11 +76,22 @@ function App() {
     const now = new Date();
     setRecordDate(getFormattedDate(now));
     setRecordTime(getFormattedTime(now));
-  }, []);
+    
+    // 로컬 스토리지에서 사용자 이름 불러오기
+    const savedUserName = localStorage.getItem('bp_tracker_user_name');
+    if (savedUserName) {
+      setCurrentUser(savedUserName);
+    }
+  }, [currentUser]);
 
   const handleAdd = async () => {
-    if (!systolic || !diastolic || !pulse || !recordDate || !recordTime) {
-      setError('모든 필드를 입력해주세요.');
+    if (!currentUser) {
+      setError('먼저 사용자 이름을 설정해주세요.');
+      return;
+    }
+    
+    if (!recordDate || !recordTime) {
+      setError('날짜와 시간을 입력해주세요.');
       return;
     }
 
@@ -80,23 +102,24 @@ function App() {
       
       const newTimestamp = new Date(`${recordDate}T${recordTime}`);
       const docRef = await addDoc(collection(db, 'blood_pressure'), {
-        systolic: Number(systolic),
-        diastolic: Number(diastolic),
-        pulse: Number(pulse),
+        systolic: systolic,
+        diastolic: diastolic,
+        pulse: pulse,
         timestamp: newTimestamp,
+        userName: currentUser,
       });
       
       setBloodPressure([...bloodPressure, { 
         id: docRef.id, 
-        systolic: Number(systolic), 
-        diastolic: Number(diastolic), 
-        pulse: Number(pulse), 
+        systolic: systolic, 
+        diastolic: diastolic, 
+        pulse: pulse, 
         timestamp: newTimestamp 
       }]);
       
-      setSystolic('');
-      setDiastolic('');
-      setPulse('');
+      setSystolic(120);
+      setDiastolic(80);
+      setPulse(70);
       const now = new Date();
       setRecordDate(getFormattedDate(now));
       setRecordTime(getFormattedTime(now));
@@ -137,20 +160,21 @@ function App() {
       const newTimestamp = new Date(`${recordDate}T${recordTime}`);
       const bpRef = doc(db, 'blood_pressure', editingId);
       await updateDoc(bpRef, {
-        systolic: Number(systolic),
-        diastolic: Number(diastolic),
-        pulse: Number(pulse),
+        systolic: systolic,
+        diastolic: diastolic,
+        pulse: pulse,
         timestamp: newTimestamp,
+        userName: currentUser,
       });
 
       setBloodPressure(bloodPressure.map(bp => 
-        bp.id === editingId ? { ...bp, systolic: Number(systolic), diastolic: Number(diastolic), pulse: Number(pulse), timestamp: newTimestamp } : bp
+        bp.id === editingId ? { ...bp, systolic: systolic, diastolic: diastolic, pulse: pulse, timestamp: newTimestamp } : bp
       ));
       
       setEditingId(null);
-      setSystolic('');
-      setDiastolic('');
-      setPulse('');
+      setSystolic(120);
+      setDiastolic(80);
+      setPulse(70);
       const now = new Date();
       setRecordDate(getFormattedDate(now));
       setRecordTime(getFormattedTime(now));
@@ -189,12 +213,29 @@ function App() {
 
   const handleCancelEdit = () => {
     setEditingId(null);
-    setSystolic('');
-    setDiastolic('');
-    setPulse('');
+    setSystolic(120);
+    setDiastolic(80);
+    setPulse(70);
     const now = new Date();
     setRecordDate(getFormattedDate(now));
     setRecordTime(getFormattedTime(now));
+  };
+
+  const handleSetUser = () => {
+    if (userName.trim()) {
+      setCurrentUser(userName.trim());
+      localStorage.setItem('bp_tracker_user_name', userName.trim());
+      setUserName('');
+      setSuccess('사용자 이름이 설정되었습니다!');
+      setTimeout(() => setSuccess(null), 3000);
+    }
+  };
+
+  const handleChangeUser = () => {
+    setCurrentUser('');
+    localStorage.removeItem('bp_tracker_user_name');
+    setSuccess('사용자가 변경되었습니다. 새로운 사용자 이름을 입력해주세요.');
+    setTimeout(() => setSuccess(null), 3000);
   };
 
   return (
@@ -224,6 +265,35 @@ function App() {
             )}
           </div>
         </div>
+        
+        {/* 사용자 이름 섹션 */}
+        <div className="user-section">
+          {currentUser ? (
+            <div className="current-user">
+              <span className="user-icon">👤</span>
+              <span className="user-name">{currentUser}</span>
+              <button className="btn-change-user" onClick={handleChangeUser}>
+                사용자 변경
+              </button>
+            </div>
+          ) : (
+            <div className="user-setup">
+              <div className="user-input-group">
+                <input
+                  type="text"
+                  placeholder="사용자 이름을 입력하세요"
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                  className="user-name-input"
+                  onKeyPress={(e) => e.key === 'Enter' && handleSetUser()}
+                />
+                <button className="btn-set-user" onClick={handleSetUser}>
+                  설정
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </header>
 
       <main className="app-main">
@@ -252,63 +322,58 @@ function App() {
           </div>
           
           <div className="input-form">
-            <div className="input-group">
-              <label htmlFor="systolic">수축기 혈압 (mmHg)</label>
-              <input
-                id="systolic"
-                type="number"
-                placeholder="120"
+            <div className="scroll-pickers-container">
+              <ScrollPicker
+                label="수축기"
+                unit="mmHg"
+                min={50}
+                max={300}
                 value={systolic}
-                onChange={(e) => setSystolic(e.target.value)}
-                min="50"
-                max="300"
+                onChange={setSystolic}
+                icon="❤️"
               />
-            </div>
-            
-            <div className="input-group">
-              <label htmlFor="diastolic">이완기 혈압 (mmHg)</label>
-              <input
-                id="diastolic"
-                type="number"
-                placeholder="80"
+              
+              <ScrollPicker
+                label="이완기"
+                unit="mmHg"
+                min={30}
+                max={200}
                 value={diastolic}
-                onChange={(e) => setDiastolic(e.target.value)}
-                min="30"
-                max="200"
+                onChange={setDiastolic}
+                icon="💓"
               />
-            </div>
-            
-            <div className="input-group">
-              <label htmlFor="pulse">맥박 (bpm)</label>
-              <input
-                id="pulse"
-                type="number"
-                placeholder="72"
+              
+              <ScrollPicker
+                label="심박수"
+                unit="bpm"
+                min={30}
+                max={200}
                 value={pulse}
-                onChange={(e) => setPulse(e.target.value)}
-                min="30"
-                max="200"
+                onChange={setPulse}
+                icon="💗"
               />
             </div>
             
-            <div className="input-group">
-              <label htmlFor="date">측정 날짜</label>
-              <input
-                id="date"
-                type="date"
-                value={recordDate}
-                onChange={(e) => setRecordDate(e.target.value)}
-              />
-            </div>
-            
-            <div className="input-group">
-              <label htmlFor="time">측정 시간</label>
-              <input
-                id="time"
-                type="time"
-                value={recordTime}
-                onChange={(e) => setRecordTime(e.target.value)}
-              />
+            <div className="datetime-inputs">
+              <div className="input-group">
+                <label htmlFor="date">측정 날짜</label>
+                <input
+                  id="date"
+                  type="date"
+                  value={recordDate}
+                  onChange={(e) => setRecordDate(e.target.value)}
+                />
+              </div>
+              
+              <div className="input-group">
+                <label htmlFor="time">측정 시간</label>
+                <input
+                  id="time"
+                  type="time"
+                  value={recordTime}
+                  onChange={(e) => setRecordTime(e.target.value)}
+                />
+              </div>
             </div>
             
             <div className="button-group">
@@ -410,7 +475,9 @@ function App() {
                       onClick={() => handleDelete(bp.id)}
                       title="삭제"
                     >
-                      🗑️
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14zM10 11v6M14 11v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
                     </button>
                   </div>
                 </div>

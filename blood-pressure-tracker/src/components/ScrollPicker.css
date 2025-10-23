@@ -1,0 +1,222 @@
+/* ScrollPicker Styles */
+.scroll-picker-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f8f9fa;
+  border-radius: 15px;
+  padding: 15px 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e9ecef;
+  min-height: 200px;
+  position: relative;
+  width: 100%;
+  flex: 1;
+}
+
+.picker-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.picker-icon {
+  font-size: 1.2rem;
+  margin-bottom: 6px;
+  color: #6c757d;
+}
+
+.picker-label-group {
+  text-align: center;
+}
+
+.picker-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 2px;
+}
+
+.picker-unit {
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+.scroll-picker-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 15px;
+  background: white;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.scroll-picker {
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scroll-picker::-webkit-scrollbar {
+  display: none;
+}
+
+.picker-items {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.picker-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #adb5bd;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  width: 100%;
+  position: relative;
+}
+
+.picker-item.selected {
+  color: #e91e63;
+  font-size: 2.2rem;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(233, 30, 99, 0.3);
+  transform: scale(1.1);
+}
+
+.picker-selection-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 50px;
+  border: 2px solid #e91e63;
+  border-radius: 15px;
+  background: rgba(233, 30, 99, 0.1);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.picker-gradient-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  background: linear-gradient(to bottom, rgba(248, 249, 250, 0.9), transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.picker-gradient-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  background: linear-gradient(to top, rgba(248, 249, 250, 0.9), transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 모바일 최적화 */
+@media (max-width: 768px) {
+  .scroll-picker-container {
+    padding: 15px 10px;
+    min-height: 280px;
+  }
+  
+  .picker-item {
+    font-size: 1.6rem;
+  }
+  
+  .picker-item.selected {
+    font-size: 2rem;
+  }
+  
+  .picker-selection-indicator {
+    height: 45px;
+  }
+  
+  .scroll-picker {
+    /* 모바일에서 더 부드러운 스크롤 */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+}
+
+/* 터치 디바이스 최적화 */
+@media (hover: none) and (pointer: coarse) {
+  .scroll-picker-container {
+    padding: 20px 15px;
+  }
+  
+  .picker-item {
+    font-size: 1.8rem;
+    padding: 10px 0;
+  }
+  
+  .picker-item.selected {
+    font-size: 2.2rem;
+  }
+  
+  .scroll-picker {
+    /* 터치 스크롤 최적화 */
+    scroll-snap-type: y mandatory;
+  }
+  
+  .picker-item {
+    scroll-snap-align: center;
+  }
+}
+
+/* 다크 모드 지원 */
+@media (prefers-color-scheme: dark) {
+  .scroll-picker-container {
+    background: #2d3748;
+    border-color: #4a5568;
+  }
+  
+  .picker-label {
+    color: #e2e8f0;
+  }
+  
+  .picker-unit {
+    color: #a0aec0;
+  }
+  
+  .picker-item {
+    color: #718096;
+  }
+  
+  .picker-item.selected {
+    color: #e91e63;
+  }
+  
+  .picker-selection-indicator {
+    border-color: #e91e63;
+    background: rgba(233, 30, 99, 0.2);
+  }
+  
+  .scroll-picker-wrapper {
+    background: #1a202c;
+  }
+  
+  .picker-gradient-top {
+    background: linear-gradient(to bottom, rgba(45, 55, 72, 0.9), transparent);
+  }
+  
+  .picker-gradient-bottom {
+    background: linear-gradient(to top, rgba(45, 55, 72, 0.9), transparent);
+  }
+}
