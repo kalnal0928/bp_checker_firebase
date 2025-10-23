@@ -174,8 +174,8 @@ const BloodPressureChart = ({ data }) => {
           font: {
             size: 12
           },
-          callback: function(value) {
-            return value + (this.scale.id === 'y' ? ' mmHg' : ' bpm');
+          callback: function(value, index, ticks) {
+            return value + ' mmHg';
           }
         }
       }
