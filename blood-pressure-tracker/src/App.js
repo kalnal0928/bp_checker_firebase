@@ -13,6 +13,10 @@ function App() {
   const [recordDate, setRecordDate] = useState('');
   const [recordTime, setRecordTime] = useState('');
   const [editingId, setEditingId] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const [connectionStatus, setConnectionStatus] = useState('checking');
 
   const formatTimestamp = (timestamp) => {
     if (timestamp && typeof timestamp.toDate === 'function') {
@@ -40,8 +44,21 @@ function App() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const querySnapshot = await getDocs(collection(db, 'blood_pressure'));
-      setBloodPressure(querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })));
+      try {
+        setLoading(true);
+        setError(null);
+        setConnectionStatus('checking');
+        
+        const querySnapshot = await getDocs(collection(db, 'blood_pressure'));
+        setBloodPressure(querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })));
+        setConnectionStatus('connected');
+      } catch (err) {
+        console.error('데이터 로딩 오류:', err);
+        setError('데이터를 불러오는 중 오류가 발생했습니다. Firebase 연결을 확인해주세요.');
+        setConnectionStatus('error');
+      } finally {
+        setLoading(false);
+      }
     };
     fetchData();
 
@@ -51,7 +68,16 @@ function App() {
   }, []);
 
   const handleAdd = async () => {
-    if (systolic && diastolic && pulse && recordDate && recordTime) {
+    if (!systolic || !diastolic || !pulse || !recordDate || !recordTime) {
+      setError('모든 필드를 입력해주세요.');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+      setSuccess(null);
+      
       const newTimestamp = new Date(`${recordDate}T${recordTime}`);
       const docRef = await addDoc(collection(db, 'blood_pressure'), {
         systolic: Number(systolic),
@@ -59,13 +85,31 @@ function App() {
         pulse: Number(pulse),
         timestamp: newTimestamp,
       });
-      setBloodPressure([...bloodPressure, { id: docRef.id, systolic: Number(systolic), diastolic: Number(diastolic), pulse: Number(pulse), timestamp: newTimestamp }]);
+      
+      setBloodPressure([...bloodPressure, { 
+        id: docRef.id, 
+        systolic: Number(systolic), 
+        diastolic: Number(diastolic), 
+        pulse: Number(pulse), 
+        timestamp: newTimestamp 
+      }]);
+      
       setSystolic('');
       setDiastolic('');
       setPulse('');
       const now = new Date();
       setRecordDate(getFormattedDate(now));
       setRecordTime(getFormattedTime(now));
+      setSuccess('혈압 기록이 성공적으로 저장되었습니다!');
+      
+      // 성공 메시지를 3초 후에 자동으로 제거
+      setTimeout(() => setSuccess(null), 3000);
+      
+    } catch (err) {
+      console.error('데이터 저장 오류:', err);
+      setError('데이터 저장 중 오류가 발생했습니다. Firebase 연결을 확인해주세요.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -80,7 +124,16 @@ function App() {
   };
 
   const handleUpdate = async () => {
-    if (editingId && systolic && diastolic && pulse && recordDate && recordTime) {
+    if (!editingId || !systolic || !diastolic || !pulse || !recordDate || !recordTime) {
+      setError('모든 필드를 입력해주세요.');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+      setSuccess(null);
+      
       const newTimestamp = new Date(`${recordDate}T${recordTime}`);
       const bpRef = doc(db, 'blood_pressure', editingId);
       await updateDoc(bpRef, {
@@ -93,6 +146,7 @@ function App() {
       setBloodPressure(bloodPressure.map(bp => 
         bp.id === editingId ? { ...bp, systolic: Number(systolic), diastolic: Number(diastolic), pulse: Number(pulse), timestamp: newTimestamp } : bp
       ));
+      
       setEditingId(null);
       setSystolic('');
       setDiastolic('');
@@ -100,6 +154,16 @@ function App() {
       const now = new Date();
       setRecordDate(getFormattedDate(now));
       setRecordTime(getFormattedTime(now));
+      setSuccess('혈압 기록이 성공적으로 업데이트되었습니다!');
+      
+      // 성공 메시지를 3초 후에 자동으로 제거
+      setTimeout(() => setSuccess(null), 3000);
+      
+    } catch (err) {
+      console.error('데이터 업데이트 오류:', err);
+      setError('데이터 업데이트 중 오류가 발생했습니다. Firebase 연결을 확인해주세요.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -119,10 +183,47 @@ function App() {
         <div className="header-content">
           <h1>🩺 혈압 관리 앱</h1>
           <p>건강한 혈압 관리를 위한 개인 기록 도구</p>
+          <div className="connection-status">
+            {connectionStatus === 'checking' && (
+              <span className="status-indicator checking">
+                <span className="status-icon">🔄</span>
+                Firebase 연결 확인 중...
+              </span>
+            )}
+            {connectionStatus === 'connected' && (
+              <span className="status-indicator connected">
+                <span className="status-icon">✅</span>
+                Firebase 연결됨
+              </span>
+            )}
+            {connectionStatus === 'error' && (
+              <span className="status-indicator error">
+                <span className="status-icon">❌</span>
+                Firebase 연결 오류
+              </span>
+            )}
+          </div>
         </div>
       </header>
 
       <main className="app-main">
+        {/* 알림 메시지 */}
+        {error && (
+          <div className="alert alert-error">
+            <span className="alert-icon">⚠️</span>
+            <span className="alert-message">{error}</span>
+            <button className="alert-close" onClick={() => setError(null)}>×</button>
+          </div>
+        )}
+        
+        {success && (
+          <div className="alert alert-success">
+            <span className="alert-icon">✅</span>
+            <span className="alert-message">{success}</span>
+            <button className="alert-close" onClick={() => setSuccess(null)}>×</button>
+          </div>
+        )}
+
         {/* 입력 섹션 */}
         <section className="input-section">
           <div className="section-header">
@@ -193,19 +294,31 @@ function App() {
             <div className="button-group">
               {editingId ? (
                 <>
-                  <button className="btn-primary" onClick={handleUpdate}>
-                    <span className="btn-icon">💾</span>
-                    업데이트
+                  <button 
+                    className="btn-primary" 
+                    onClick={handleUpdate}
+                    disabled={loading}
+                  >
+                    <span className="btn-icon">{loading ? '⏳' : '💾'}</span>
+                    {loading ? '업데이트 중...' : '업데이트'}
                   </button>
-                  <button className="btn-secondary" onClick={handleCancelEdit}>
+                  <button 
+                    className="btn-secondary" 
+                    onClick={handleCancelEdit}
+                    disabled={loading}
+                  >
                     <span className="btn-icon">❌</span>
                     취소
                   </button>
                 </>
               ) : (
-                <button className="btn-primary" onClick={handleAdd}>
-                  <span className="btn-icon">➕</span>
-                  기록 저장
+                <button 
+                  className="btn-primary" 
+                  onClick={handleAdd}
+                  disabled={loading}
+                >
+                  <span className="btn-icon">{loading ? '⏳' : '➕'}</span>
+                  {loading ? '저장 중...' : '기록 저장'}
                 </button>
               )}
             </div>

@@ -146,3 +146,4 @@ const BloodPressureStats = ({ data }) => {
 };
 
 export default BloodPressureStats;
+
