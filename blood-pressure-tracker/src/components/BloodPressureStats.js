@@ -1,4 +1,5 @@
 import React from 'react';
+import { classifyBloodPressure } from '../utils/bloodPressureUtils';
 
 const BloodPressureStats = ({ data }) => {
   if (!data || data.length === 0) {
@@ -39,21 +40,25 @@ const BloodPressureStats = ({ data }) => {
   const minDiastolic = recentData.length > 0 ? Math.min(...recentData.map(item => item.diastolic)) : 0;
 
   // 혈압 상태 분석
-  const getBloodPressureStatus = (systolic, diastolic) => {
-    if (systolic < 120 && diastolic < 80) {
-      return { status: '정상', color: '#2ecc71', icon: '✓' };
-    } else if (systolic < 130 && diastolic < 80) {
-      return { status: '고혈압 전단계', color: '#f39c12', icon: '⚠' };
-    } else if (systolic < 140 || diastolic < 90) {
-      return { status: '고혈압 1단계', color: '#e67e22', icon: '⚠' };
-    } else if (systolic < 180 || diastolic < 120) {
-      return { status: '고혈압 2단계', color: '#e74c3c', icon: '⚠' };
-    } else {
-      return { status: '고혈압 위기', color: '#c0392b', icon: '🚨' };
+  const getStatusDetails = (classification) => {
+    switch (classification) {
+      case "정상 혈압":
+        return { status: classification, color: "#2ecc71", icon: "✓" };
+      case "주의 혈압":
+        return { status: classification, color: "#f39c12", icon: "⚠" };
+      case "1기 고혈압":
+        return { status: classification, color: "#e67e22", icon: "⚠" };
+      case "2기 고혈압":
+        return { status: classification, color: "#e74c3c", icon: "⚠" };
+      case "고혈압 위기":
+        return { status: classification, color: "#c0392b", icon: "🚨" };
+      default:
+        return { status: "분류 불가", color: "#7f8c8d", icon: "?" };
     }
   };
 
-  const currentStatus = getBloodPressureStatus(avgSystolic, avgDiastolic);
+  const bloodPressureClassification = classifyBloodPressure(avgSystolic, avgDiastolic);
+  const currentStatus = getStatusDetails(bloodPressureClassification);
 
   return (
     <div className="stats-container">
