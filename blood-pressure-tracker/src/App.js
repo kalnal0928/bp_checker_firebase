@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db } from './firebase';
-import { collection, addDoc, getDocs, doc, updateDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import BloodPressureChart from './components/BloodPressureChart';
 import BloodPressureStats from './components/BloodPressureStats';
 import './App.css';
@@ -162,6 +162,26 @@ function App() {
     } catch (err) {
       console.error('데이터 업데이트 오류:', err);
       setError('데이터 업데이트 중 오류가 발생했습니다. Firebase 연결을 확인해주세요.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      setLoading(true);
+      setError(null);
+      setSuccess(null);
+
+      await deleteDoc(doc(db, 'blood_pressure', id));
+      setBloodPressure(bloodPressure.filter(bp => bp.id !== id));
+      setSuccess('혈압 기록이 성공적으로 삭제되었습니다!');
+
+      setTimeout(() => setSuccess(null), 3000);
+
+    } catch (err) {
+      console.error('데이터 삭제 오류:', err);
+      setError('데이터 삭제 중 오류가 발생했습니다. Firebase 연결을 확인해주세요.');
     } finally {
       setLoading(false);
     }
@@ -384,6 +404,13 @@ function App() {
                       title="수정"
                     >
                       ✏️
+                    </button>
+                    <button 
+                      className="btn-delete" 
+                      onClick={() => handleDelete(bp.id)}
+                      title="삭제"
+                    >
+                      🗑️
                     </button>
                   </div>
                 </div>
