@@ -43,11 +43,6 @@ const ScrollPicker = ({
     }
   };
 
-  // 스크롤 시작
-  const handleScrollStart = () => {
-    setIsScrolling(true);
-  };
-
   // 스크롤 종료 (스냅 효과)
   const handleScrollEnd = () => {
     setIsScrolling(false);

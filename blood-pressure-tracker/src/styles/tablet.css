@@ -1,0 +1,8 @@
+/* 태블릿 최적화 */
+.scroll-pickers-container {
+  gap: 10px;
+}
+
+.datetime-inputs {
+  gap: 15px;
+}

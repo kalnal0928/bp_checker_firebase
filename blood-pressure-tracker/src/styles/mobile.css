@@ -1,0 +1,132 @@
+/* 모바일 최적화 */
+.App {
+  padding: 10px;
+}
+
+.app-header {
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.header-content h1 {
+  font-size: 2rem;
+}
+
+section {
+  padding: 20px;
+}
+
+.input-form {
+  display: flex;
+  flex-direction: column !important; /* 주요 섹션들이 세로로 쌓이도록 */
+  gap: 15px; /* 섹션 간 간격 */
+}
+
+.scroll-pickers-container {
+  flex-direction: row;
+  gap: 12px;
+  padding: 15px;
+  margin-bottom: 0;
+  justify-content: flex-start;
+  overflow-x: auto; /* 가로 스크롤 추가 */
+  -webkit-overflow-scrolling: touch; /* iOS 스크롤 부드럽게 */
+}
+
+.input-bottom-row {
+  display: flex;
+  flex-direction: row; /* 날짜/시간과 버튼 그룹이 가로로 나란히 */
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap; /* 공간 부족 시 줄바꿈 허용 */
+}
+
+.datetime-inputs {
+  display: flex;
+  flex-direction: row; /* 날짜와 시간이 가로로 나란히 */
+  gap: 10px;
+  flex: 1; /* 가능한 공간을 차지하도록 */
+  flex-wrap: wrap;
+}
+
+.datetime-inputs .input-group {
+  flex: 1; /* 각 입력 그룹이 가능한 공간을 차지하도록 */
+  min-width: 120px; /* 최소 너비 설정 */
+}
+
+.button-group {
+  display: flex;
+  flex-direction: row; /* 버튼들이 가로로 나란히 */
+  gap: 10px;
+  flex-shrink: 0; /* 줄어들지 않도록 */
+}
+
+@media (max-width: 480px) {
+  .header-content h1 {
+    font-size: 1.8rem;
+  }
+  
+  .section-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .stat-card {
+    padding: 15px;
+  }
+  
+  .record-card {
+    padding: 15px;
+  }
+  
+  .blood-pressure {
+    font-size: 1.3rem;
+  }
+  
+  .pulse {
+    font-size: 1.1rem;
+  }
+}
+
+/* 모바일 입력 레이아웃 개선 */
+@media (max-width: 768px) {
+  .scroll-pickers-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .input-bottom-row {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .datetime-inputs {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    flex: 1 1 auto;
+    flex-wrap: wrap;
+  }
+
+  .datetime-inputs .input-group {
+    flex: 1 1 30%;
+    min-width: 100px;
+  }
+
+  .button-group {
+    flex: 1 1 30%;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .btn-primary {
+    width: 100%;
+    white-space: nowrap;
+  }
+}

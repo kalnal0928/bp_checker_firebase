@@ -8,9 +8,9 @@ import './App.css';
 
 function App() {
   const [bloodPressure, setBloodPressure] = useState([]);
-  const [systolic, setSystolic] = useState(120);
-  const [diastolic, setDiastolic] = useState(80);
-  const [pulse, setPulse] = useState(70);
+  const [systolic, setSystolic] = useState(130);
+  const [diastolic, setDiastolic] = useState(90);
+  const [pulse, setPulse] = useState(60);
   const [recordDate, setRecordDate] = useState('');
   const [recordTime, setRecordTime] = useState('');
   const [editingId, setEditingId] = useState(null);
@@ -116,10 +116,9 @@ function App() {
         pulse: pulse, 
         timestamp: newTimestamp 
       }]);
-      
-      setSystolic(120);
-      setDiastolic(80);
-      setPulse(70);
+      setSystolic(130);
+      setDiastolic(90);
+      setPulse(60);
       const now = new Date();
       setRecordDate(getFormattedDate(now));
       setRecordTime(getFormattedTime(now));
@@ -172,9 +171,9 @@ function App() {
       ));
       
       setEditingId(null);
-      setSystolic(120);
-      setDiastolic(80);
-      setPulse(70);
+      setSystolic(130);
+      setDiastolic(90);
+      setPulse(60);
       const now = new Date();
       setRecordDate(getFormattedDate(now));
       setRecordTime(getFormattedTime(now));
@@ -213,9 +212,9 @@ function App() {
 
   const handleCancelEdit = () => {
     setEditingId(null);
-    setSystolic(120);
-    setDiastolic(80);
-    setPulse(70);
+    setSystolic(130);
+    setDiastolic(90);
+    setPulse(60);
     const now = new Date();
     setRecordDate(getFormattedDate(now));
     setRecordTime(getFormattedTime(now));
@@ -354,58 +353,60 @@ function App() {
               />
             </div>
             
-            <div className="datetime-inputs">
-              <div className="input-group">
-                <label htmlFor="date">측정 날짜</label>
-                <input
-                  id="date"
-                  type="date"
-                  value={recordDate}
-                  onChange={(e) => setRecordDate(e.target.value)}
-                />
+            <div className="input-bottom-row">
+              <div className="datetime-inputs">
+                <div className="input-group">
+                  <label htmlFor="date">측정 날짜</label>
+                  <input
+                    id="date"
+                    type="date"
+                    value={recordDate}
+                    onChange={(e) => setRecordDate(e.target.value)}
+                  />
+                </div>
+                
+                <div className="input-group">
+                  <label htmlFor="time">측정 시간</label>
+                  <input
+                    id="time"
+                    type="time"
+                    value={recordTime}
+                    onChange={(e) => setRecordTime(e.target.value)}
+                  />
+                </div>
               </div>
               
-              <div className="input-group">
-                <label htmlFor="time">측정 시간</label>
-                <input
-                  id="time"
-                  type="time"
-                  value={recordTime}
-                  onChange={(e) => setRecordTime(e.target.value)}
-                />
-              </div>
-            </div>
-            
-            <div className="button-group">
-              {editingId ? (
-                <>
+              <div className="button-group">
+                {editingId ? (
+                  <>
+                    <button 
+                      className="btn-primary" 
+                      onClick={handleUpdate}
+                      disabled={loading}
+                    >
+                      <span className="btn-icon">{loading ? '⏳' : '💾'}</span>
+                      {loading ? '업데이트 중...' : '업데이트'}
+                    </button>
+                    <button 
+                      className="btn-secondary" 
+                      onClick={handleCancelEdit}
+                      disabled={loading}
+                    >
+                      <span className="btn-icon">❌</span>
+                      취소
+                    </button>
+                  </>
+                ) : (
                   <button 
                     className="btn-primary" 
-                    onClick={handleUpdate}
+                    onClick={handleAdd}
                     disabled={loading}
                   >
-                    <span className="btn-icon">{loading ? '⏳' : '💾'}</span>
-                    {loading ? '업데이트 중...' : '업데이트'}
+                    <span className="btn-icon">{loading ? '⏳' : '➕'}</span>
+                    {loading ? '저장 중...' : '기록 저장'}
                   </button>
-                  <button 
-                    className="btn-secondary" 
-                    onClick={handleCancelEdit}
-                    disabled={loading}
-                  >
-                    <span className="btn-icon">❌</span>
-                    취소
-                  </button>
-                </>
-              ) : (
-                <button 
-                  className="btn-primary" 
-                  onClick={handleAdd}
-                  disabled={loading}
-                >
-                  <span className="btn-icon">{loading ? '⏳' : '➕'}</span>
-                  {loading ? '저장 중...' : '기록 저장'}
-                </button>
-              )}
+                )}
+              </div>
             </div>
           </div>
         </section>
