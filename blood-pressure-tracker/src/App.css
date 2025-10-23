@@ -608,38 +608,37 @@ section {
   }
   
   .input-form {
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     gap: 10px;
+    padding-bottom: 10px; /* 스크롤바를 위해 패딩 추가 */
+  }
+  
+  .input-form > div {
+    flex-shrink: 0; /* 자식 요소들이 줄어들지 않도록 */
+  }
+  
+  .scroll-pickers-container {
+    flex-direction: row;
+    gap: 12px;
+    padding: 15px;
+    margin-bottom: 0; /* 부모가 flex-direction: row 이므로 마진 조정 */
+    justify-content: flex-start;
+  }
+  
+  .datetime-inputs {
+    flex-direction: column;
+    gap: 12px;
+    flex-shrink: 0;
   }
   
   .button-group {
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
-  }
-  
-  .btn-primary, .btn-secondary {
-    width: auto;
-  }
-  
-  .stats-grid {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 10px;
-  }
-  
-  .record-main {
-    flex-direction: row;
-    align-items: center;
-    gap: 15px;
-  }
-  
-  .record-values {
-    flex-direction: row;
-    align-items: center;
-    gap: 15px;
-  }
-  
-  .chart-wrapper {
-    height: 300px;
+    flex-shrink: 0;
   }
 }
 
@@ -822,10 +821,13 @@ section {
 /* 모바일 최적화 */
 @media (max-width: 768px) {
   .scroll-pickers-container {
-    flex-direction: column;
+    flex-direction: row;
     gap: 12px;
     padding: 15px;
     margin-bottom: 20px;
+    overflow-x: auto; /* 가로 스크롤 추가 */
+    -webkit-overflow-scrolling: touch; /* iOS 스크롤 부드럽게 */
+    justify-content: flex-start; /* 시작 지점부터 정렬 */
   }
   
   .datetime-inputs {
@@ -842,5 +844,44 @@ section {
   
   .datetime-inputs {
     gap: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .scroll-pickers-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 10px 0;
+    justify-content: space-between;
+  }
+
+  .datetime-inputs {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .datetime-inputs .input-group {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .button-group {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 }
