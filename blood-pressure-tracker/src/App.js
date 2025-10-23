@@ -46,23 +46,56 @@ function App() {
   };
 
   useEffect(() => {
+    const savedUserName = localStorage.getItem('bp_tracker_user_name');
+    if (savedUserName) {
+      setCurrentUser(savedUserName);
+    }
+
+    const now = new Date();
+    setRecordDate(getFormattedDate(now));
+    setRecordTime(getFormattedTime(now));
+  }, []);
+
+  useEffect(() => {
     const fetchData = async () => {
       if (!currentUser) {
         setBloodPressure([]);
+        setSystolic(130);
+        setDiastolic(90);
+        setPulse(60);
         return;
       }
-      
+
       try {
         setLoading(true);
         setError(null);
         setConnectionStatus('checking');
-        
+
         const querySnapshot = await getDocs(collection(db, 'blood_pressure'));
         const userData = querySnapshot.docs
           .map(doc => ({ ...doc.data(), id: doc.id }))
           .filter(item => item.userName === currentUser);
+
         setBloodPressure(userData);
         setConnectionStatus('connected');
+
+        if (userData.length > 0) {
+          const sorted = userData.sort((a, b) => {
+            const dateA = a.timestamp.toDate ? a.timestamp.toDate() : new Date(a.timestamp);
+            const dateB = b.timestamp.toDate ? b.timestamp.toDate() : new Date(b.timestamp);
+            return dateB - dateA;
+          });
+
+          const latest = sorted[0];
+          setSystolic(latest.systolic);
+          setDiastolic(latest.diastolic);
+          setPulse(latest.pulse);
+        } else {
+          setSystolic(130);
+          setDiastolic(90);
+          setPulse(60);
+        }
+
       } catch (err) {
         console.error('데이터 로딩 오류:', err);
         setError('데이터를 불러오는 중 오류가 발생했습니다. Firebase 연결을 확인해주세요.');
@@ -71,17 +104,8 @@ function App() {
         setLoading(false);
       }
     };
-    fetchData();
 
-    const now = new Date();
-    setRecordDate(getFormattedDate(now));
-    setRecordTime(getFormattedTime(now));
-    
-    // 로컬 스토리지에서 사용자 이름 불러오기
-    const savedUserName = localStorage.getItem('bp_tracker_user_name');
-    if (savedUserName) {
-      setCurrentUser(savedUserName);
-    }
+    fetchData();
   }, [currentUser]);
 
   const handleAdd = async () => {

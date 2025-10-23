@@ -24,11 +24,32 @@ const ScrollPicker = ({
   // 스크롤 위치 계산
   const scrollTop = currentIndex * itemHeight;
 
+  // 초기 스크롤 위치 설정
+  useEffect(() => {
+    if (containerRef.current) {
+      const initialIndex = values.indexOf(value);
+      if (initialIndex !== -1) {
+        containerRef.current.scrollTop = initialIndex * itemHeight;
+      }
+    }
+  }, []); // 처음 한 번만 실행
+
+  // 값이 변경될 때 스크롤 위치 업데이트
   useEffect(() => {
     if (containerRef.current && !isScrolling) {
-      containerRef.current.scrollTop = scrollTop;
+      const targetIndex = values.indexOf(value);
+      if (targetIndex !== -1) {
+        const targetScrollTop = targetIndex * itemHeight;
+        // 현재 스크롤 위치와 목표 위치가 다를 경우에만 부드럽게 이동
+        if (containerRef.current.scrollTop !== targetScrollTop) {
+          containerRef.current.scrollTo({
+            top: targetScrollTop,
+            behavior: 'smooth'
+          });
+        }
+      }
     }
-  }, [scrollTop, isScrolling]);
+  }, [value, isScrolling]);
 
   // 스크롤 이벤트 핸들러
   const handleScroll = () => {
