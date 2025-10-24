@@ -135,20 +135,24 @@ section {
 
 .tab-button {
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* 아이콘 위, 텍스트 아래 */
+  align-items: center;
+  justify-content: center;
+  padding: 10px 8px;
   gap: 4px;
-  padding: 8px 5px;
-  font-size: 0.8rem;
-  text-align: center; /* Ensure text wraps centrally */
+  min-width: 80px; /* 텍스트 줄바꿈 방지 */
+  white-space: nowrap; /* 텍스트가 한 줄로 유지되도록 */
+  border: none;
+  background: none;
 }
 
 .tab-icon {
-  font-size: 1.5rem; /* Make icon a bit larger */
+  font-size: 1.5rem;
 }
 
 .tab-text {
-  display: block; /* Ensure it can control its own layout */
-  line-height: 1.2; /* Adjust line height for wrapped text */
-  word-break: keep-all; /* Prevent breaking in the middle of a word */
-  text-align: center; /* Explicitly center wrapped text */
+  display: block;
+  text-align: center;
+  word-break: keep-all; /* 단어 중간 줄바꿈 방지 */
+  line-height: 1.2;
 }
