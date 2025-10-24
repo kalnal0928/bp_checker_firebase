@@ -135,15 +135,16 @@ section {
 
 .tab-button {
   display: flex;
-  flex-direction: column; /* 아이콘 위, 텍스트 아래 */
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 10px 8px;
   gap: 4px;
-  min-width: 80px; /* 텍스트 줄바꿈 방지 */
-  white-space: nowrap; /* 텍스트가 한 줄로 유지되도록 */
-  border: none;
+  min-width: 100px; /* 충분한 너비 확보 */
+  max-width: 120px;
+  white-space: nowrap; /* 줄바꿈 방지 */
   background: none;
+  border: none;
 }
 
 .tab-icon {
@@ -155,4 +156,5 @@ section {
   text-align: center;
   word-break: keep-all; /* 단어 중간 줄바꿈 방지 */
   line-height: 1.2;
+  font-size: 0.85rem;
 }
