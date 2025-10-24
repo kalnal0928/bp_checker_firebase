@@ -10,6 +10,8 @@ const ScrollPicker = ({
   onChange, 
   icon 
 }) => {
+  console.log(`[ScrollPicker: ${label}] Rendered. Prop value: ${value}`);
+
   const containerRef = useRef(null);
   const [isScrolling, setIsScrolling] = useState(false);
   const itemHeight = 50; // 각 항목의 높이
@@ -24,24 +26,16 @@ const ScrollPicker = ({
   // 스크롤 위치 계산
   const scrollTop = currentIndex * itemHeight;
 
-  // 초기 스크롤 위치 설정
-  useEffect(() => {
-    if (containerRef.current) {
-      const initialIndex = values.indexOf(value);
-      if (initialIndex !== -1) {
-        containerRef.current.scrollTop = initialIndex * itemHeight;
-      }
-    }
-  }, []); // 처음 한 번만 실행
-
   // 값이 변경될 때 스크롤 위치 업데이트
   useEffect(() => {
+    console.log(`[ScrollPicker: ${label}] useEffect for value update triggered. Value: ${value}, isScrolling: ${isScrolling}`);
     if (containerRef.current && !isScrolling) {
       const targetIndex = values.indexOf(value);
       if (targetIndex !== -1) {
         const targetScrollTop = targetIndex * itemHeight;
         // 현재 스크롤 위치와 목표 위치가 다를 경우에만 부드럽게 이동
         if (containerRef.current.scrollTop !== targetScrollTop) {
+          console.log(`[ScrollPicker: ${label}] Scrolling to new value: ${value}`);
           containerRef.current.scrollTo({
             top: targetScrollTop,
             behavior: 'smooth'
