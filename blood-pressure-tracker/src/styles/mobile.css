@@ -150,6 +150,8 @@ section {
 }
 
 .tab-text {
+  display: block; /* Ensure it can control its own layout */
   line-height: 1.2; /* Adjust line height for wrapped text */
   word-break: keep-all; /* Prevent breaking in the middle of a word */
+  text-align: center; /* Explicitly center wrapped text */
 }

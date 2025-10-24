@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db } from './firebase';
-import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, onSnapshot } from 'firebase/firestore';
+import { collection, addDoc, doc, updateDoc, deleteDoc, query, where, onSnapshot } from 'firebase/firestore';
 import BloodPressureChart from './components/BloodPressureChart';
 import BloodPressureStats from './components/BloodPressureStats';
 import ScrollPicker from './components/ScrollPicker';

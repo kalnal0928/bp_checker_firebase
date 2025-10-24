@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import './ScrollPicker.css';
 
 const ScrollPicker = ({ 
@@ -15,8 +15,10 @@ const ScrollPicker = ({
   const itemHeight = 50; // 각 항목의 높이
   const visibleItems = 5; // 보이는 항목 수
 
-  // 값 범위에 따른 배열 생성
-  const values = Array.from({ length: max - min + 1 }, (_, i) => min + i);
+  const values = useMemo(() => 
+    Array.from({ length: max - min + 1 }, (_, i) => min + i), 
+    [min, max]
+  );
 
   // 값이 변경될 때 스크롤 위치 업데이트 ( 외부 요인에 의한 변경 )
   useEffect(() => {
@@ -33,7 +35,7 @@ const ScrollPicker = ({
         }
       }
     }
-  }, [value, isScrolling]);
+  }, [value, isScrolling, values]);
 
   // 스크롤 종료 (스냅 효과 및 값 변경)
   const handleScrollEnd = () => {
