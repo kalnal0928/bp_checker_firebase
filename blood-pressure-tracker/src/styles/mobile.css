@@ -130,3 +130,26 @@ section {
     white-space: nowrap;
   }
 }
+
+/* Tab Navigation on Mobile */
+.tab-navigation {
+  gap: 5px;
+  padding: 5px;
+}
+
+.tab-button {
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 5px;
+  font-size: 0.8rem;
+  text-align: center; /* Ensure text wraps centrally */
+}
+
+.tab-icon {
+  font-size: 1.5rem; /* Make icon a bit larger */
+}
+
+.tab-text {
+  line-height: 1.2; /* Adjust line height for wrapped text */
+  word-break: keep-all; /* Prevent breaking in the middle of a word */
+}

@@ -20,7 +20,7 @@ function App() {
   const [connectionStatus, setConnectionStatus] = useState('checking');
   const [userName, setUserName] = useState('');
   const [currentUser, setCurrentUser] = useState('');
-  const [activeTab, setActiveTab] = useState('records');
+  const [activeTab, setActiveTab] = useState('add');
 
   const formatTimestamp = (timestamp) => {
     if (timestamp && typeof timestamp.toDate === 'function') {
@@ -333,25 +333,29 @@ function App() {
             className={`tab-button ${activeTab === 'add' ? 'active' : ''}`}
             onClick={() => setActiveTab('add')}
           >
-            📝 기록 추가
+            <span className="tab-icon">📝</span>
+            <span className="tab-text">기록 추가</span>
           </button>
           <button 
             className={`tab-button ${activeTab === 'records' ? 'active' : ''}`}
             onClick={() => setActiveTab('records')}
           >
-            📋 기록 목록
+            <span className="tab-icon">📋</span>
+            <span className="tab-text">기록 목록</span>
           </button>
           <button 
             className={`tab-button ${activeTab === 'stats' ? 'active' : ''}`}
             onClick={() => setActiveTab('stats')}
           >
-            📊 건강 통계
+            <span className="tab-icon">📊</span>
+            <span className="tab-text">건강 통계</span>
           </button>
           <button 
             className={`tab-button ${activeTab === 'chart' ? 'active' : ''}`}
             onClick={() => setActiveTab('chart')}
           >
-            📈 혈압 추이
+            <span className="tab-icon">📈</span>
+            <span className="tab-text">혈압 추이</span>
           </button>
         </nav>
 
