@@ -10,8 +10,6 @@ const ScrollPicker = ({
   onChange, 
   icon 
 }) => {
-  console.log(`[ScrollPicker: ${label}] Rendered. Prop value: ${value}`);
-
   const containerRef = useRef(null);
   const [isScrolling, setIsScrolling] = useState(false);
   const itemHeight = 50; // 각 항목의 높이
@@ -20,22 +18,14 @@ const ScrollPicker = ({
   // 값 범위에 따른 배열 생성
   const values = Array.from({ length: max - min + 1 }, (_, i) => min + i);
 
-  // 현재 선택된 값의 인덱스
-  const currentIndex = values.indexOf(value);
-
-  // 스크롤 위치 계산
-  const scrollTop = currentIndex * itemHeight;
-
-  // 값이 변경될 때 스크롤 위치 업데이트
+  // 값이 변경될 때 스크롤 위치 업데이트 ( 외부 요인에 의한 변경 )
   useEffect(() => {
-    console.log(`[ScrollPicker: ${label}] useEffect for value update triggered. Value: ${value}, isScrolling: ${isScrolling}`);
     if (containerRef.current && !isScrolling) {
       const targetIndex = values.indexOf(value);
       if (targetIndex !== -1) {
         const targetScrollTop = targetIndex * itemHeight;
         // 현재 스크롤 위치와 목표 위치가 다를 경우에만 부드럽게 이동
         if (containerRef.current.scrollTop !== targetScrollTop) {
-          console.log(`[ScrollPicker: ${label}] Scrolling to new value: ${value}`);
           containerRef.current.scrollTo({
             top: targetScrollTop,
             behavior: 'smooth'
@@ -45,20 +35,7 @@ const ScrollPicker = ({
     }
   }, [value, isScrolling]);
 
-  // 스크롤 이벤트 핸들러
-  const handleScroll = () => {
-    if (!containerRef.current) return;
-    
-    const scrollTop = containerRef.current.scrollTop;
-    const index = Math.round(scrollTop / itemHeight);
-    const newValue = Math.max(min, Math.min(max, values[index]));
-    
-    if (newValue !== value) {
-      onChange(newValue);
-    }
-  };
-
-  // 스크롤 종료 (스냅 효과)
+  // 스크롤 종료 (스냅 효과 및 값 변경)
   const handleScrollEnd = () => {
     setIsScrolling(false);
     
@@ -67,6 +44,11 @@ const ScrollPicker = ({
     const scrollTop = containerRef.current.scrollTop;
     const index = Math.round(scrollTop / itemHeight);
     const targetScrollTop = index * itemHeight;
+    
+    const newValue = values[index];
+    if (newValue !== undefined && newValue !== value) {
+      onChange(newValue);
+    }
     
     // 부드럽게 스냅
     containerRef.current.scrollTo({
@@ -84,15 +66,6 @@ const ScrollPicker = ({
     const delta = e.deltaY > 0 ? 1 : -1;
     const newValue = Math.max(min, Math.min(max, value + delta));
     onChange(newValue);
-    
-    // 스크롤 위치 업데이트
-    const newIndex = values.indexOf(newValue);
-    const targetScrollTop = newIndex * itemHeight;
-    
-    containerRef.current.scrollTo({
-      top: targetScrollTop,
-      behavior: 'smooth'
-    });
   };
 
   // 터치 이벤트 핸들러
@@ -100,11 +73,12 @@ const ScrollPicker = ({
     setIsScrolling(true);
   };
 
-  const handleTouchEnd = () => {
-    setTimeout(() => {
-      setIsScrolling(false);
-      handleScrollEnd();
-    }, 150);
+  const scrollEndTimer = useRef(null);
+  const handleUserScroll = () => {
+    if (scrollEndTimer.current) {
+      clearTimeout(scrollEndTimer.current);
+    }
+    scrollEndTimer.current = setTimeout(handleScrollEnd, 150);
   };
 
   return (
@@ -121,9 +95,8 @@ const ScrollPicker = ({
         <div 
           className="scroll-picker"
           ref={containerRef}
-          onScroll={handleScroll}
+          onScroll={handleUserScroll}
           onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
           onWheel={handleWheel}
           style={{ height: itemHeight * visibleItems }}
         >

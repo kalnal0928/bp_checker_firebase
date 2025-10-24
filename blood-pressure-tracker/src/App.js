@@ -70,20 +70,16 @@ function App() {
     setError(null);
     setConnectionStatus('checking');
     
-    console.log(`[App.js] Setting up listener for user: ${currentUser}`);
     const q = query(collection(db, 'blood_pressure'), where("userName", "==", currentUser));
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      console.log('[App.js] onSnapshot triggered.');
       const userData = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-      console.log('[App.js] Fetched userData:', userData);
 
       setBloodPressure(userData);
       setConnectionStatus('connected');
       setLoading(false);
 
       if (userData.length > 0) {
-        console.log('[App.js] userData has records. Finding latest...');
         const sorted = userData.sort((a, b) => {
           const dateA = a.timestamp.toDate ? a.timestamp.toDate() : new Date(a.timestamp);
           const dateB = b.timestamp.toDate ? b.timestamp.toDate() : new Date(b.timestamp);
@@ -91,29 +87,22 @@ function App() {
         });
 
         const latest = sorted[0];
-        console.log('[App.js] Latest record:', latest);
-        
-        console.log(`[App.js] Calling setSystolic(${latest.systolic}), setDiastolic(${latest.diastolic}), setPulse(${latest.pulse})`);
         setSystolic(latest.systolic);
         setDiastolic(latest.diastolic);
         setPulse(latest.pulse);
       } else {
-        console.log('[App.js] No user data for this user. Resetting to default values.');
         setSystolic(130);
         setDiastolic(90);
         setPulse(60);
       }
     }, (err) => {
-      console.error('[App.js] onSnapshot ERROR:', err);
+      console.error('데이터 로딩 오류:', err);
       setError('데이터를 불러오는 중 오류가 발생했습니다. Firebase 연결을 확인해주세요.');
       setConnectionStatus('error');
       setLoading(false);
     });
 
-    return () => {
-      console.log(`[App.js] Cleaning up listener for user: ${currentUser}`);
-      unsubscribe();
-    };
+    return () => unsubscribe();
   }, [currentUser]);
 
   const handleAdd = async () => {
