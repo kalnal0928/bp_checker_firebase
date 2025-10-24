@@ -60,27 +60,23 @@ section {
   flex-shrink: 0; /* 줄어들지 않도록 */
 }
 
+/* 모바일 반응형 스타일 */
 @media (max-width: 480px) {
   .header-content h1 {
     font-size: 1.8rem;
   }
-  
   .section-header h2 {
     font-size: 1.5rem;
   }
-  
   .stat-card {
     padding: 15px;
   }
-  
   .record-card {
     padding: 15px;
   }
-  
   .blood-pressure {
     font-size: 1.3rem;
   }
-  
   .pulse {
     font-size: 1.1rem;
   }
@@ -138,6 +134,7 @@ section {
 }
 
 .tab-button {
+  display: flex;
   flex-direction: column;
   gap: 4px;
   padding: 8px 5px;
