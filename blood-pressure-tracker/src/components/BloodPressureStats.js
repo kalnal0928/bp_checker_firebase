@@ -18,6 +18,10 @@ const BloodPressureStats = ({ data }) => {
   const recentData = data.filter(item => {
     const itemDate = item.측정시간.toDate ? item.측정시간.toDate() : new Date(item.측정시간);
     return itemDate >= sevenDaysAgo;
+  }).sort((a, b) => {
+    const dateA = a.측정시간.toDate ? a.측정시간.toDate() : new Date(a.측정시간);
+    const dateB = b.측정시간.toDate ? b.측정시간.toDate() : new Date(b.측정시간);
+    return dateA - dateB;
   });
 
   // 평균 계산
