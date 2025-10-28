@@ -37,13 +37,13 @@ const BloodPressureChart = ({ data }) => {
 
   // 데이터를 날짜순으로 정렬
   const sortedData = [...data].sort((a, b) => {
-    const dateA = a.timestamp.toDate ? a.timestamp.toDate() : new Date(a.timestamp);
-    const dateB = b.timestamp.toDate ? b.timestamp.toDate() : new Date(b.timestamp);
+    const dateA = a.측정시간.toDate ? a.측정시간.toDate() : new Date(a.측정시간);
+    const dateB = b.측정시간.toDate ? b.측정시간.toDate() : new Date(b.측정시간);
     return dateA - dateB;
   });
 
   const labels = sortedData.map(item => {
-    const date = item.timestamp.toDate ? item.timestamp.toDate() : new Date(item.timestamp);
+    const date = item.측정시간.toDate ? item.측정시간.toDate() : new Date(item.측정시간);
     return date.toLocaleDateString('ko-KR', { 
       month: 'short', 
       day: 'numeric',
@@ -52,9 +52,9 @@ const BloodPressureChart = ({ data }) => {
     });
   });
 
-  const systolicData = sortedData.map(item => item.systolic);
-  const diastolicData = sortedData.map(item => item.diastolic);
-  const pulseData = sortedData.map(item => item.pulse);
+  const systolicData = sortedData.map(item => item.수축기);
+  const diastolicData = sortedData.map(item => item.이완기);
+  const pulseData = sortedData.map(item => item.맥박);
 
   const chartData = {
     labels,

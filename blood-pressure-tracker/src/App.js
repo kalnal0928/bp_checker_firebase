@@ -71,7 +71,7 @@ function App() {
     setError(null);
     setConnectionStatus('checking');
     
-    const q = query(collection(db, 'blood_pressure'), where("userName", "==", currentUser));
+    const q = query(collection(db, 'blood_pressure'), where("이름", "==", currentUser));
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const userData = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
@@ -82,15 +82,15 @@ function App() {
 
       if (userData.length > 0) {
         const sorted = userData.sort((a, b) => {
-          const dateA = a.timestamp.toDate ? a.timestamp.toDate() : new Date(a.timestamp);
-          const dateB = b.timestamp.toDate ? b.timestamp.toDate() : new Date(b.timestamp);
+          const dateA = a.측정시간.toDate ? a.측정시간.toDate() : new Date(a.측정시간);
+          const dateB = b.측정시간.toDate ? b.측정시간.toDate() : new Date(b.측정시간);
           return dateB - dateA;
         });
 
         const latest = sorted[0];
-        setSystolic(latest.systolic);
-        setDiastolic(latest.diastolic);
-        setPulse(latest.pulse);
+        setSystolic(latest.수축기);
+        setDiastolic(latest.이완기);
+        setPulse(latest.맥박);
       } else {
         setSystolic(130);
         setDiastolic(90);
@@ -124,11 +124,11 @@ function App() {
       
       const newTimestamp = new Date(`${recordDate}T${recordTime}`);
       await addDoc(collection(db, 'blood_pressure'), {
-        systolic: systolic,
-        diastolic: diastolic,
-        pulse: pulse,
-        timestamp: newTimestamp,
-        userName: currentUser,
+        '수축기': systolic,
+        '이완기': diastolic,
+        '맥박': pulse,
+        '측정시간': newTimestamp,
+        '이름': currentUser,
       });
       
       setSystolic(130);
@@ -153,10 +153,10 @@ function App() {
 
   const handleEdit = (bp) => {
     setEditingId(bp.id);
-    setSystolic(bp.systolic);
-    setDiastolic(bp.diastolic);
-    setPulse(bp.pulse);
-    const bpDate = bp.timestamp.toDate();
+    setSystolic(bp.수축기);
+    setDiastolic(bp.이완기);
+    setPulse(bp.맥박);
+    const bpDate = bp.측정시간.toDate();
     setRecordDate(getFormattedDate(bpDate));
     setRecordTime(getFormattedTime(bpDate));
     setActiveTab('add'); // Switch to add/edit tab
@@ -176,11 +176,11 @@ function App() {
       const newTimestamp = new Date(`${recordDate}T${recordTime}`);
       const bpRef = doc(db, 'blood_pressure', editingId);
       await updateDoc(bpRef, {
-        systolic: systolic,
-        diastolic: diastolic,
-        pulse: pulse,
-        timestamp: newTimestamp,
-        userName: currentUser,
+        '수축기': systolic,
+        '이완기': diastolic,
+        '맥박': pulse,
+        '측정시간': newTimestamp,
+        '이름': currentUser,
       });
 
       setEditingId(null);
@@ -491,8 +491,8 @@ function App() {
                 <div className="records-list">
                   {bloodPressure
                     .sort((a, b) => {
-                      const dateA = a.timestamp.toDate ? a.timestamp.toDate() : new Date(a.timestamp);
-                      const dateB = b.timestamp.toDate ? b.timestamp.toDate() : new Date(b.timestamp);
+                      const dateA = a.측정시간.toDate ? a.측정시간.toDate() : new Date(a.측정시간);
+                      const dateB = b.측정시간.toDate ? b.측정시간.toDate() : new Date(b.측정시간);
                       return dateB - dateA;
                     })
                     .map((bp) => (
@@ -500,18 +500,18 @@ function App() {
                       <div className="record-main">
                         <div className="record-values">
                           <div className="blood-pressure">
-                            <span className="systolic">{bp.systolic}</span>
+                            <span className="systolic">{bp.수축기}</span>
                             <span className="separator">/</span>
-                            <span className="diastolic">{bp.diastolic}</span>
+                            <span className="diastolic">{bp.이완기}</span>
                             <span className="unit">mmHg</span>
                           </div>
                           <div className="pulse">
-                            <span className="pulse-value">{bp.pulse}</span>
+                            <span className="pulse-value">{bp.맥박}</span>
                             <span className="unit">bpm</span>
                           </div>
                         </div>
                         <div className="record-time">
-                          {formatTimestamp(bp.timestamp)}
+                          {formatTimestamp(bp.측정시간)}
                         </div>
                       </div>
                       <div className="record-actions">

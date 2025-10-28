@@ -16,28 +16,28 @@ const BloodPressureStats = ({ data }) => {
   sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
   
   const recentData = data.filter(item => {
-    const itemDate = item.timestamp.toDate ? item.timestamp.toDate() : new Date(item.timestamp);
+    const itemDate = item.측정시간.toDate ? item.측정시간.toDate() : new Date(item.측정시간);
     return itemDate >= sevenDaysAgo;
   });
 
   // 평균 계산
   const avgSystolic = recentData.length > 0 
-    ? Math.round(recentData.reduce((sum, item) => sum + item.systolic, 0) / recentData.length)
+    ? Math.round(recentData.reduce((sum, item) => sum + item.수축기, 0) / recentData.length)
     : 0;
   
   const avgDiastolic = recentData.length > 0 
-    ? Math.round(recentData.reduce((sum, item) => sum + item.diastolic, 0) / recentData.length)
+    ? Math.round(recentData.reduce((sum, item) => sum + item.이완기, 0) / recentData.length)
     : 0;
   
   const avgPulse = recentData.length > 0 
-    ? Math.round(recentData.reduce((sum, item) => sum + item.pulse, 0) / recentData.length)
+    ? Math.round(recentData.reduce((sum, item) => sum + item.맥박, 0) / recentData.length)
     : 0;
 
   // 최고/최저값 계산
-  const maxSystolic = recentData.length > 0 ? Math.max(...recentData.map(item => item.systolic)) : 0;
-  const minSystolic = recentData.length > 0 ? Math.min(...recentData.map(item => item.systolic)) : 0;
-  const maxDiastolic = recentData.length > 0 ? Math.max(...recentData.map(item => item.diastolic)) : 0;
-  const minDiastolic = recentData.length > 0 ? Math.min(...recentData.map(item => item.diastolic)) : 0;
+  const maxSystolic = recentData.length > 0 ? Math.max(...recentData.map(item => item.수축기)) : 0;
+  const minSystolic = recentData.length > 0 ? Math.min(...recentData.map(item => item.수축기)) : 0;
+  const maxDiastolic = recentData.length > 0 ? Math.max(...recentData.map(item => item.이완기)) : 0;
+  const minDiastolic = recentData.length > 0 ? Math.min(...recentData.map(item => item.이완기)) : 0;
 
   // 혈압 상태 분석
   const getStatusDetails = (classification) => {
@@ -128,7 +128,7 @@ const BloodPressureStats = ({ data }) => {
           <div className="stat-value">
             <span className="latest">
               {recentData.length > 0 ? 
-                `${recentData[recentData.length - 1].systolic}/${recentData[recentData.length - 1].diastolic}` : 
+                `${recentData[recentData.length - 1].수축기}/${recentData[recentData.length - 1].이완기}` : 
                 '-'
               }
             </span>
