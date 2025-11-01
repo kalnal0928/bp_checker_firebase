@@ -12,6 +12,10 @@ const Login = ({ user, setUser }) => {
   const [error, setError] = useState(null);
 
   const handleSignUp = async () => {
+    if (!email || !password) {
+      setError('이메일과 비밀번호를 모두 입력해주세요.');
+      return;
+    }
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       setUser(auth.currentUser);
@@ -21,6 +25,10 @@ const Login = ({ user, setUser }) => {
   };
 
   const handleLogin = async () => {
+    if (!email || !password) {
+      setError('이메일과 비밀번호를 모두 입력해주세요.');
+      return;
+    }
     try {
       await signInWithEmailAndPassword(auth, email, password);
       setUser(auth.currentUser);
