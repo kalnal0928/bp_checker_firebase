@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { db } from './firebase';
-import { collection, addDoc, doc, updateDoc, deleteDoc, query, where, onSnapshot } from 'firebase/firestore';
+import { db, auth } from './firebase';
+import { collection, addDoc, doc, updateDoc, deleteDoc, query, where, onSnapshot, getDocs, writeBatch } from 'firebase/firestore';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 import BloodPressureChart from './components/BloodPressureChart';
 import BloodPressureStats from './components/BloodPressureStats';
 import ScrollPicker from './components/ScrollPicker';
+import Login from './components/Login';
 import './App.css';
 
 function App() {
+  const [user, setUser] = useState(null);
   const [bloodPressure, setBloodPressure] = useState([]);
   const [systolic, setSystolic] = useState(130);
   const [diastolic, setDiastolic] = useState(90);
@@ -18,13 +21,23 @@ function App() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [connectionStatus, setConnectionStatus] = useState('checking');
-  const [userName, setUserName] = useState('');
-  const [currentUser, setCurrentUser] = useState('');
   const [activeTab, setActiveTab] = useState('add');
   const [timeRange, setTimeRange] = useState('week'); // 'week', 'month', 'quarter', 'year'
   const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7)); // YYYY-MM
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()); // YYYY
   const [selectedQuarter, setSelectedQuarter] = useState(Math.floor(new Date().getMonth() / 3) + 1); // 1, 2, 3, or 4
+  const [migrationName, setMigrationName] = useState('');
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   const formatTimestamp = (timestamp) => {
     if (timestamp && typeof timestamp.toDate === 'function') {
@@ -51,18 +64,13 @@ function App() {
   };
 
   useEffect(() => {
-    const savedUserName = localStorage.getItem('bp_tracker_user_name');
-    if (savedUserName) {
-      setCurrentUser(savedUserName);
-    }
-
     const now = new Date();
     setRecordDate(getFormattedDate(now));
     setRecordTime(getFormattedTime(now));
   }, []);
 
   useEffect(() => {
-    if (!currentUser) {
+    if (!user) {
       setBloodPressure([]);
       setSystolic(130);
       setDiastolic(90);
@@ -75,7 +83,7 @@ function App() {
     setError(null);
     setConnectionStatus('checking');
     
-    const q = query(collection(db, 'blood_pressure'), where("이름", "==", currentUser));
+    const q = query(collection(db, 'blood_pressure'), where("uid", "==", user.uid));
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const userData = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
@@ -108,11 +116,11 @@ function App() {
     });
 
     return () => unsubscribe();
-  }, [currentUser]);
+  }, [user]);
 
   const handleAdd = async () => {
-    if (!currentUser) {
-      setError('먼저 사용자 이름을 설정해주세요.');
+    if (!user) {
+      setError('로그인이 필요합니다.');
       return;
     }
     
@@ -132,7 +140,7 @@ function App() {
         '이완기': diastolic,
         '맥박': pulse,
         '측정시간': newTimestamp,
-        '이름': currentUser,
+        'uid': user.uid,
       });
       
       setSystolic(130);
@@ -184,7 +192,7 @@ function App() {
         '이완기': diastolic,
         '맥박': pulse,
         '측정시간': newTimestamp,
-        '이름': currentUser,
+        'uid': user.uid,
       });
 
       setEditingId(null);
@@ -238,21 +246,42 @@ function App() {
     setActiveTab('records'); // Switch back to records tab
   };
 
-  const handleSetUser = () => {
-    if (userName.trim()) {
-      setCurrentUser(userName.trim());
-      localStorage.setItem('bp_tracker_user_name', userName.trim());
-      setUserName('');
-      setSuccess('사용자 이름이 설정되었습니다!');
-      setTimeout(() => setSuccess(null), 3000);
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+    } catch (err) {
+      setError(err.message);
     }
   };
 
-  const handleChangeUser = () => {
-    setCurrentUser('');
-    localStorage.removeItem('bp_tracker_user_name');
-    setSuccess('사용자가 변경되었습니다. 새로운 사용자 이름을 입력해주세요.');
-    setTimeout(() => setSuccess(null), 3000);
+  const handleMigrate = async () => {
+    if (!migrationName) {
+      setError('이전 사용자 이름을 입력해주세요.');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      const q = query(collection(db, 'blood_pressure'), where("이름", "==", migrationName));
+      const querySnapshot = await getDocs(q);
+
+      const batch = writeBatch(db);
+      querySnapshot.forEach((doc) => {
+        batch.update(doc.ref, { uid: user.uid });
+      });
+      await batch.commit();
+
+      setSuccess('데이터 마이그레이션이 완료되었습니다.');
+      setMigrationName('');
+
+    } catch (err) {
+      console.error('데이터 마이그레이션 오류:', err);
+      setError('데이터 마이그레이션 중 오류가 발생했습니다.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const filteredBloodPressure = bloodPressure.filter(bp => {
@@ -280,12 +309,14 @@ function App() {
       startDate.setDate(now.getDate() - 7);
     } else if (timeRange === '30-days') {
       startDate.setDate(now.getDate() - 30);
-    } else if (timeRange === 'quarter') {
-      startDate.setMonth(now.getMonth() - 3);
     }
 
     return recordDate >= startDate && recordDate <= now;
   });
+
+  if (!user) {
+    return <Login setUser={setUser} />;
+  }
 
   return (
     <div className="App">
@@ -315,33 +346,23 @@ function App() {
           </div>
         </div>
         
-        {/* 사용자 이름 섹션 */}
         <div className="user-section">
-          {currentUser ? (
-            <div className="current-user">
-              <span className="user-icon">👤</span>
-              <span className="user-name">{currentUser}</span>
-              <button className="btn-change-user" onClick={handleChangeUser}>
-                사용자 변경
-              </button>
-            </div>
-          ) : (
-            <div className="user-setup">
-              <div className="user-input-group">
-                <input
-                  type="text"
-                  placeholder="사용자 이름을 입력하세요"
-                  value={userName}
-                  onChange={(e) => setUserName(e.target.value)}
-                  className="user-name-input"
-                  onKeyPress={(e) => e.key === 'Enter' && handleSetUser()}
-                />
-                <button className="btn-set-user" onClick={handleSetUser}>
-                  설정
-                </button>
-              </div>
-            </div>
-          )}
+          <div className="current-user">
+            <span className="user-icon">👤</span>
+            <span className="user-name">{user.email}</span>
+            <button className="btn-change-user" onClick={handleLogout}>
+              로그아웃
+            </button>
+          </div>
+          <div className="migration-section">
+            <input 
+              type="text" 
+              placeholder="이전 사용자 이름 입력"
+              value={migrationName}
+              onChange={(e) => setMigrationName(e.target.value)}
+            />
+            <button onClick={handleMigrate}>데이터 마이그레이션</button>
+          </div>
         </div>
       </header>
 
