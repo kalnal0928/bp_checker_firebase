@@ -22,6 +22,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState('');
   const [activeTab, setActiveTab] = useState('add');
   const [timeRange, setTimeRange] = useState('week'); // 'week', 'month', 'quarter', 'year'
+  const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7)); // YYYY-MM
 
   const formatTimestamp = (timestamp) => {
     if (timestamp && typeof timestamp.toDate === 'function') {
@@ -255,12 +256,17 @@ function App() {
   const filteredBloodPressure = bloodPressure.filter(bp => {
     const recordDate = bp.측정시간.toDate ? bp.측정시간.toDate() : new Date(bp.측정시간);
     const now = new Date();
-    let startDate = new Date();
 
+    if (timeRange === 'month') {
+      const [year, month] = selectedMonth.split('-').map(Number);
+      const startDate = new Date(year, month - 1, 1);
+      const endDate = new Date(year, month, 0);
+      return recordDate >= startDate && recordDate <= endDate;
+    }
+
+    let startDate = new Date();
     if (timeRange === 'week') {
       startDate.setDate(now.getDate() - 7);
-    } else if (timeRange === 'month') {
-      startDate.setMonth(now.getMonth() - 1);
     } else if (timeRange === 'quarter') {
       startDate.setMonth(now.getMonth() - 3);
     } else if (timeRange === 'year') {
@@ -491,6 +497,11 @@ function App() {
                 <button onClick={() => setTimeRange('quarter')} className={timeRange === 'quarter' ? 'active' : ''}>분기별</button>
                 <button onClick={() => setTimeRange('year')} className={timeRange === 'year' ? 'active' : ''}>연도별</button>
               </div>
+              {timeRange === 'month' && (
+                <div className="month-selector">
+                  <input type="month" value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)} />
+                </div>
+              )}
               <BloodPressureStats data={filteredBloodPressure} />
             </section>
           )}
@@ -507,6 +518,11 @@ function App() {
                 <button onClick={() => setTimeRange('quarter')} className={timeRange === 'quarter' ? 'active' : ''}>분기별</button>
                 <button onClick={() => setTimeRange('year')} className={timeRange === 'year' ? 'active' : ''}>연도별</button>
               </div>
+              {timeRange === 'month' && (
+                <div className="month-selector">
+                  <input type="month" value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)} />
+                </div>
+              )}
               <BloodPressureChart data={filteredBloodPressure} />
             </section>
           )}

@@ -181,3 +181,22 @@ section {
   color: white;
   border-color: #3498db;
 }
+
+.month-selector {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.month-selector input[type="month"] {
+  border: 2px solid #ecf0f1;
+  padding: 10px 15px;
+  border-radius: 12px;
+  font-size: 1rem;
+  background: #fff;
+  color: #333;
+  outline: none;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 200px;
+}
