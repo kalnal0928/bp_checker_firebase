@@ -21,6 +21,7 @@ function App() {
   const [userName, setUserName] = useState('');
   const [currentUser, setCurrentUser] = useState('');
   const [activeTab, setActiveTab] = useState('add');
+  const [timeRange, setTimeRange] = useState('week'); // 'week', 'month', 'quarter', 'year'
 
   const formatTimestamp = (timestamp) => {
     if (timestamp && typeof timestamp.toDate === 'function') {
@@ -251,6 +252,24 @@ function App() {
     setTimeout(() => setSuccess(null), 3000);
   };
 
+  const filteredBloodPressure = bloodPressure.filter(bp => {
+    const recordDate = bp.측정시간.toDate ? bp.측정시간.toDate() : new Date(bp.측정시간);
+    const now = new Date();
+    let startDate = new Date();
+
+    if (timeRange === 'week') {
+      startDate.setDate(now.getDate() - 7);
+    } else if (timeRange === 'month') {
+      startDate.setMonth(now.getMonth() - 1);
+    } else if (timeRange === 'quarter') {
+      startDate.setMonth(now.getMonth() - 3);
+    } else if (timeRange === 'year') {
+      startDate.setFullYear(now.getFullYear() - 1);
+    }
+
+    return recordDate >= startDate && recordDate <= now;
+  });
+
   return (
     <div className="App">
       <header className="app-header">
@@ -466,7 +485,13 @@ function App() {
                 <h2>건강 통계</h2>
                 <div className="section-icon">📊</div>
               </div>
-              <BloodPressureStats data={bloodPressure} />
+              <div className="time-range-selector">
+                <button onClick={() => setTimeRange('week')} className={timeRange === 'week' ? 'active' : ''}>주간</button>
+                <button onClick={() => setTimeRange('month')} className={timeRange === 'month' ? 'active' : ''}>월간</button>
+                <button onClick={() => setTimeRange('quarter')} className={timeRange === 'quarter' ? 'active' : ''}>분기별</button>
+                <button onClick={() => setTimeRange('year')} className={timeRange === 'year' ? 'active' : ''}>연도별</button>
+              </div>
+              <BloodPressureStats data={filteredBloodPressure} />
             </section>
           )}
 
@@ -476,7 +501,13 @@ function App() {
                 <h2>혈압 추이</h2>
                 <div className="section-icon">📈</div>
               </div>
-              <BloodPressureChart data={bloodPressure} />
+              <div className="time-range-selector">
+                <button onClick={() => setTimeRange('week')} className={timeRange === 'week' ? 'active' : ''}>주간</button>
+                <button onClick={() => setTimeRange('month')} className={timeRange === 'month' ? 'active' : ''}>월간</button>
+                <button onClick={() => setTimeRange('quarter')} className={timeRange === 'quarter' ? 'active' : ''}>분기별</button>
+                <button onClick={() => setTimeRange('year')} className={timeRange === 'year' ? 'active' : ''}>연도별</button>
+              </div>
+              <BloodPressureChart data={filteredBloodPressure} />
             </section>
           )}
 

@@ -6,3 +6,23 @@
 .datetime-inputs {
   gap: 15px;
 }
+
+.time-range-selector {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.time-range-selector button {
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.time-range-selector button.active {
+  background: #3498db;
+  color: white;
+  border-color: #3498db;
+}
