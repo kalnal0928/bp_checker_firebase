@@ -267,6 +267,8 @@ function App() {
     let startDate = new Date();
     if (timeRange === 'week') {
       startDate.setDate(now.getDate() - 7);
+    } else if (timeRange === '30-days') {
+      startDate.setDate(now.getDate() - 30);
     } else if (timeRange === 'quarter') {
       startDate.setMonth(now.getMonth() - 3);
     } else if (timeRange === 'year') {
@@ -493,7 +495,8 @@ function App() {
               </div>
               <div className="time-range-selector">
                 <button onClick={() => setTimeRange('week')} className={timeRange === 'week' ? 'active' : ''}>주간</button>
-                <button onClick={() => setTimeRange('month')} className={timeRange === 'month' ? 'active' : ''}>월간</button>
+                <button onClick={() => setTimeRange('30-days')} className={timeRange === '30-days' ? 'active' : ''}>30일간</button>
+                <button onClick={() => setTimeRange('month')} className={timeRange === 'month' ? 'active' : ''}>월별</button>
                 <button onClick={() => setTimeRange('quarter')} className={timeRange === 'quarter' ? 'active' : ''}>분기별</button>
                 <button onClick={() => setTimeRange('year')} className={timeRange === 'year' ? 'active' : ''}>연도별</button>
               </div>
@@ -514,7 +517,8 @@ function App() {
               </div>
               <div className="time-range-selector">
                 <button onClick={() => setTimeRange('week')} className={timeRange === 'week' ? 'active' : ''}>주간</button>
-                <button onClick={() => setTimeRange('month')} className={timeRange === 'month' ? 'active' : ''}>월간</button>
+                <button onClick={() => setTimeRange('30-days')} className={timeRange === '30-days' ? 'active' : ''}>30일간</button>
+                <button onClick={() => setTimeRange('month')} className={timeRange === 'month' ? 'active' : ''}>월별</button>
                 <button onClick={() => setTimeRange('quarter')} className={timeRange === 'quarter' ? 'active' : ''}>분기별</button>
                 <button onClick={() => setTimeRange('year')} className={timeRange === 'year' ? 'active' : ''}>연도별</button>
               </div>
