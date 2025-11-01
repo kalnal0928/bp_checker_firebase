@@ -281,28 +281,30 @@ section {
 
 .migration-section {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 10px;
-  flex-direction: column;
+  flex-direction: column; /* Ensure vertical stacking */
+  align-items: center; /* Center items horizontally */
+  margin-top: 15px; /* Adjust top margin */
+  padding: 0 10px; /* Add horizontal padding */
 }
 
 .migration-section input {
-  padding: 8px;
+  width: 100%; /* Take full width */
+  padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-bottom: 10px;
-  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 10px; /* Space between input and button */
+  font-size: 1rem;
 }
 
 .migration-section button {
-  padding: 8px 12px;
+  width: 100%; /* Take full width */
+  padding: 10px;
   background: #f39c12;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
-  width: 100%;
+  font-size: 1rem;
 }
 
 .migration-section button:hover {
