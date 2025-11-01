@@ -320,6 +320,37 @@ section {
   background: #e67e22;
 }
 
+/* 강제로 모바일에서 세로 회전/절대 위치 제거 (우측 세로 탭 문제 해결) */
+@media (max-width: 768px) {
+  .migration-section,
+  .migration-section * {
+    position: static !important;
+    right: auto !important;
+    top: auto !important;
+    transform: none !important;
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+    white-space: normal !important;
+    display: block !important;
+    margin: 0 !important;
+  }
+
+  .migration-section {
+    align-items: stretch !important;
+    width: 100% !important;
+  }
+
+  .migration-section button {
+    width: 100% !important;
+    height: auto !important;
+    padding: 12px !important;
+    border-radius: 8px !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
+    align-self: stretch !important;
+  }
+}
+
 /* Very small screens - ensure header layout stacks vertically */
 @media (max-width: 480px) {
   .app-header {
