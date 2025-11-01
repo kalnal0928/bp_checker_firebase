@@ -356,14 +356,47 @@ function App() {
               로그아웃
             </button>
           </div>
-            <div className="migration-section">
-            <input 
-              type="text" 
-              placeholder="이전 사용자 이름 입력"
-              value={migrationName}
-              onChange={(e) => setMigrationName(e.target.value)}
-            />
-            <button className="btn-migrate" onClick={handleMigrate}>데이터 마이그레이션</button>
+          <div className="migration-wrap" style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
+            <div className="migration-section" style={{width: '100%', maxWidth: '520px'}}>
+              <input
+                type="text"
+                placeholder="이전 사용자 이름 입력"
+                value={migrationName}
+                onChange={(e) => setMigrationName(e.target.value)}
+                style={{
+                  width: '100%',
+                  boxSizing: 'border-box',
+                  padding: '10px',
+                  borderRadius: '8px',
+                  border: '1px solid #ccc'
+                }}
+              />
+              <span
+                role="button"
+                tabIndex={0}
+                className="btn-migrate"
+                onClick={handleMigrate}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleMigrate(); } }}
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  padding: '12px',
+                  marginTop: '10px',
+                  background: '#f39c12',
+                  color: '#fff',
+                  borderRadius: '8px',
+                  textAlign: 'center',
+                  cursor: 'pointer',
+                  transform: 'none',
+                  writingMode: 'horizontal-tb',
+                  WebkitTransform: 'none',
+                  WebkitWritingMode: 'horizontal-tb',
+                  boxSizing: 'border-box'
+                }}
+              >
+                데이터 마이그레이션
+              </span>
+            </div>
           </div>
         </div>
       </header>

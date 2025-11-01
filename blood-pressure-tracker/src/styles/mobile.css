@@ -400,3 +400,48 @@ section {
     margin-top: 8px;
   }
 }
+
+/* Samsung Browser 우회용 강제 오버라이드 for migrate button */
+@media (max-width: 768px) {
+  .btn-migrate,
+  .btn-migrate[role="button"] {
+    position: static !important;
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    padding: 12px 14px !important;
+    margin: 10px 0 !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+    transform-origin: center !important;
+    writing-mode: horizontal-tb !important;
+    -webkit-writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+    -webkit-text-orientation: mixed !important;
+    white-space: normal !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+    border-radius: 8px !important;
+    -webkit-appearance: none !important;
+    box-shadow: none !important;
+    z-index: 10 !important;
+    background: #f39c12 !important;
+    color: white !important;
+  }
+
+  .migration-wrap {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: stretch !important;
+  }
+
+  .migration-section {
+    width: 100% !important;
+    max-width: 520px !important;
+    position: static !important;
+    transform: none !important;
+    padding: 10px !important;
+    margin: 0 !important;
+  }
+}
