@@ -1,293 +1,73 @@
-/* 모바일 최적화 */
-.App {
-  padding: 10px;
-}
-
-.app-header {
-  padding: 20px;
-  margin-bottom: 20px;
-}
-
-.header-content h1 {
-  font-size: 2rem;
-}
-
-section {
-  padding: 20px;
-}
-
-.input-form {
-  display: flex;
-  flex-direction: column !important; /* 주요 섹션들이 세로로 쌓이도록 */
-  gap: 15px; /* 섹션 간 간격 */
-}
-
-.scroll-pickers-container {
-  flex-direction: row;
-  gap: 12px;
-  padding: 15px;
-  margin-bottom: 0;
-  justify-content: flex-start;
-  overflow-x: auto; /* 가로 스크롤 추가 */
-  -webkit-overflow-scrolling: touch; /* iOS 스크롤 부드럽게 */
-}
-
-.input-bottom-row {
-  display: flex;
-  flex-direction: row; /* 날짜/시간과 버튼 그룹이 가로로 나란히 */
-  gap: 10px;
-  align-items: center;
-  flex-wrap: wrap; /* 공간 부족 시 줄바꿈 허용 */
-}
-
-.datetime-inputs {
-  display: flex;
-  flex-direction: row; /* 날짜와 시간이 가로로 나란히 */
-  gap: 10px;
-  flex: 1; /* 가능한 공간을 차지하도록 */
-  flex-wrap: wrap;
-}
-
-.datetime-inputs .input-group {
-  flex: 1; /* 각 입력 그룹이 가능한 공간을 차지하도록 */
-  min-width: 120px; /* 최소 너비 설정 */
-}
-
-.button-group {
-  display: flex;
-  flex-direction: row; /* 버튼들이 가로로 나란히 */
-/*
-  Force vertical stacking of the input form on small screens so that
-  the date/time inputs and the save button move below the scroll pickers.
-  This prevents horizontal scrolling and keeps a clean vertical flow.
+/* 모바일 전용 스타일 (정리된 버전)
+   - 목적: 모바일(세로)에서 레이아웃 안정화 및 Samsung Browser 특이 동작 우회
+   - 주의: 이 파일은 PC용 스타일을 덮어쓰기 위해 App.css에서 미디어 쿼리로 임포트됩니다.
 */
-  gap: 10px;
-  flex-shrink: 0; /* 줄어들지 않도록 */
+
+/* 기본 모바일 조정 */
+.App { padding: 10px; }
+.app-header { padding: 20px; margin-bottom: 20px; }
+.header-content h1 { font-size: 2rem; }
+section { padding: 20px; }
+
+/* 입력 폼 기본: 세로 스택 */
+.input-form { display:flex; flex-direction:column; gap:15px; }
+
+/* 스크롤 픽커 컨테이너: 내부에서만 가로 스크롤 허용 */
+.scroll-pickers-container {
+  display:flex; flex-direction:row; gap:12px; padding:15px; margin-bottom:0;
+  justify-content:flex-start; overflow-x:auto; -webkit-overflow-scrolling:touch; box-sizing:border-box;
 }
 
-/* 모바일 반응형 스타일 */
-@media (max-width: 480px) {
-  .header-content h1 {
-    font-size: 1.8rem;
-  }
-  .section-header h2 {
-    font-size: 1.5rem;
-  }
-  .stat-card {
-    padding: 15px;
-  }
-  .record-card {
-    padding: 15px;
-  }
-  .blood-pressure {
-    font-size: 1.3rem;
-  }
-  .pulse {
-    font-size: 1.1rem;
-  }
+.input-bottom-row { display:flex; flex-direction:row; gap:10px; align-items:center; flex-wrap:wrap; }
+.datetime-inputs { display:flex; flex-direction:row; gap:10px; flex:1; flex-wrap:wrap; }
+.datetime-inputs .input-group { flex:1; min-width:120px; }
+.button-group { display:flex; flex-direction:row; gap:10px; flex-shrink:0; }
+
+@media (max-width:480px) {
+  .header-content h1 { font-size:1.8rem; }
+  .section-header h2 { font-size:1.5rem; }
+  .stat-card, .record-card { padding:15px; }
+  .blood-pressure { font-size:1.3rem; }
+  .pulse { font-size:1.1rem; }
 }
 
-/* 모바일 입력 레이아웃 개선 */
-@media (max-width: 768px) {
-  .scroll-pickers-container {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin-bottom: 20px;
+/* 모바일(<=768px) 레이아웃 강제: 입력을 수직으로 쌓아 가로 스크롤 제거 */
+@media (max-width:768px) {
+  .scroll-pickers-container { width:100% !important; padding:12px !important; box-sizing:border-box !important; justify-content:center !important; overflow-x:auto !important; }
+  .input-form { display:flex !important; flex-direction:column !important; gap:16px !important; overflow-x:visible !important; padding-bottom:8px !important; }
+  .input-bottom-row { display:flex !important; flex-direction:column !important; gap:12px !important; align-items:stretch !important; width:100% !important; }
+  .datetime-inputs { display:flex !important; flex-direction:column !important; gap:10px !important; width:100% !important; }
+  .datetime-inputs .input-group { width:100% !important; min-width:0 !important; }
+  .button-group { display:flex !important; flex-direction:column !important; gap:8px !important; width:100% !important; justify-content:center !important; align-items:stretch !important; }
+  .btn-primary { width:100% !important; }
+
+  /* Samsung Browser 우회: 탭/버튼 회전 방지 */
+  .tab-button, .tab-button[role="button"], .btn-migrate, .btn-migrate[role="button"] {
+    transform:none !important; -webkit-transform:none !important; writing-mode:horizontal-tb !important; -webkit-writing-mode:horizontal-tb !important; text-orientation:mixed !important; -webkit-text-orientation:mixed !important; white-space:normal !important; line-height:1.2 !important;
   }
 
-  .input-bottom-row {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    flex-wrap: wrap;
-  
-  .input-form {
-    display: flex !important;
-    flex-direction: column !important; /* stack vertically */
-    gap: 16px !important;
-    overflow-x: visible !important;
-    padding-bottom: 8px !important;
-  }
+  .tab-button, .tab-button[role="button"] { display:flex !important; flex-direction:column !important; align-items:center !important; justify-content:center !important; padding:10px 8px !important; min-width:80px !important; max-width:120px !important; background:none !important; border:none !important; }
 
-  .scroll-pickers-container {
-    width: 100% !important;
-    padding: 12px !important;
-    box-sizing: border-box !important;
-    justify-content: center !important;
-    overflow-x: auto; /* allow only the pickers to scroll horizontally if necessary */
-  }
-
-  .input-bottom-row {
-    display: flex !important;
-    flex-direction: column !important; /* move date/time + buttons below */
-    gap: 12px !important;
-    align-items: stretch !important;
-    width: 100% !important;
-  }
-
-  .datetime-inputs {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 10px !important;
-    width: 100% !important;
-  }
-
-  .datetime-inputs .input-group {
-    width: 100% !important;
-    min-width: 0 !important;
-  }
-
-  .button-group {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 8px !important;
-    width: 100% !important;
-    justify-content: center !important;
-    align-items: stretch !important;
-  }
-
-  .button-group .btn-primary,
-  .btn-primary {
-    width: 100% !important;
-  }
-    justify-content: space-between;
-    align-items: flex-end;
-  }
-
-  .datetime-inputs {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    flex: 1 1 auto;
-    flex-wrap: wrap;
-  }
-
-  .datetime-inputs .input-group {
-    flex: 1 1 30%;
-    min-width: 100px;
-  }
-
-  .button-group {
-    flex: 1 1 30%;
-    display: flex;
-    justify-content: flex-end;
-  }
-
-  .btn-primary {
-    width: 100%;
-    white-space: nowrap;
-  }
+  .migration-wrap { width:100% !important; display:flex !important; justify-content:center !important; }
+  .migration-section { width:100% !important; max-width:520px !important; padding:10px !important; box-sizing:border-box !important; }
+  .btn-migrate, .btn-migrate[role="button"] { display:block !important; width:100% !important; padding:12px !important; margin:10px 0 !important; text-align:center !important; background:#f39c12 !important; color:#fff !important; border-radius:8px !important; -webkit-appearance:none !important; appearance:none !important; box-shadow:none !important; }
 }
 
-/* Tab Navigation on Mobile */
-.tab-navigation {
-  gap: 5px;
-  padding: 5px;
-}
+/* 기타 모바일 보조 스타일 */
+.tab-icon { font-size:1.5rem; }
+.tab-text { display:block; text-align:center; word-break:keep-all; line-height:1.2; font-size:0.85rem; }
+.month-selector { display:flex; justify-content:center; margin-bottom:20px; }
+.month-selector input[type="month"] { width:100%; max-width:200px; border-radius:12px; padding:10px 15px; border:2px solid #ecf0f1; }
+.year-selector { display:flex; justify-content:center; margin-top:10px; }
+.year-selector input[type="number"] { width:100%; max-width:200px; border-radius:12px; padding:10px 15px; border:2px solid #ecf0f1; }
+.quarter-selector { display:flex; justify-content:center; margin-bottom:20px; flex-wrap:wrap; }
+.login-container { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px; background:white; border-radius:20px; box-shadow:0 8px 32px rgba(0,0,0,0.1); margin:20px auto; max-width:400px; }
+.login-container input { width:100%; padding:12px; margin-bottom:10px; border:1px solid #ccc; border-radius:8px; }
+.login-container button { width:100%; padding:12px; background:#3498db; color:white; border:none; border-radius:8px; cursor:pointer; margin-top:10px; }
+.migration-section { display:flex; flex-direction:column; align-items:stretch; margin-top:12px; padding:0 8px; box-sizing:border-box; }
+.migration-section input { width:100%; padding:10px; border:1px solid #ccc; border-radius:8px; margin-bottom:10px; }
 
-/* Samsung Browser 문제 해결을 위한 탭 버튼 오버라이드 */
-@media (max-width: 768px) {
-  .tab-button,
-  .tab-button[role="button"] {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 10px 8px !important;
-    gap: 4px !important;
-    min-width: 80px !important;
-    max-width: 120px !important;
-    background: none !important;
-    border: none !important;
-    transform: none !important;
-    writing-mode: horizontal-tb !important;
-    -webkit-writing-mode: horizontal-tb !important;
-    text-orientation: mixed !important;
-    -webkit-text-orientation: mixed !important;
-  }
-}
-
-.tab-icon {
-  font-size: 1.5rem;
-}
-
-.tab-text {
-  display: block;
-  text-align: center;
-  word-break: keep-all; /* 단어 중간 줄바꿈 방지 */
-  line-height: 1.2;
-  font-size: 0.85rem;
-}
-
-.time-range-selector {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-  /* Specific migrate button override to handle stubborn browser styles (Samsung) */
-  @media (max-width: 768px) {
-    .btn-migrate {
-      position: relative !important;
-      display: inline-block !important;
-      width: 100% !important;
-      height: auto !important;
-      padding: 12px 14px !important;
-      transform: none !important;
-      writing-mode: horizontal-tb !important;
-      text-orientation: mixed !important;
-      white-space: normal !important;
-      line-height: 1.2 !important;
-      text-align: center !important;
-      border-radius: 8px !important;
-      -webkit-transform: none !important;
-      -webkit-writing-mode: horizontal-tb !important;
-      -webkit-text-orientation: mixed !important;
-      box-shadow: none !important;
-      margin: 0 !important;
-      right: auto !important;
-      top: auto !important;
-      z-index: 3 !important;
-    }
-  }
-}
-
-.time-range-selector button {
-  background: #f0f0f0;
-  border: 1px solid #ccc;
-  padding: 8px 12px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  font-size: 0.9rem;
-  margin: 2px;
-}
-
-.time-range-selector button.active {
-  background: #3498db;
-  color: white;
-  border-color: #3498db;
-}
-
-.month-selector {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.month-selector input[type="month"] {
-  border: 2px solid #ecf0f1;
-  padding: 10px 15px;
-  border-radius: 12px;
-  font-size: 1rem;
-  background: #fff;
-  color: #333;
-  outline: none;
-  transition: all 0.3s ease;
-  width: 100%;
-  max-width: 200px;
-}
+/* end of mobile.css */
 
 .year-selector {
   display: flex;
@@ -437,8 +217,6 @@ section {
     text-align: center !important;
     align-self: stretch !important;
   }
-}
-
 /* Very small screens - ensure header layout stacks vertically */
 @media (max-width: 480px) {
   .app-header {
@@ -457,10 +235,9 @@ section {
     max-width: 100%;
     width: 100%;
     padding: 12px;
-  }
-
     margin-top: 8px;
   }
+
 }
 
 /**

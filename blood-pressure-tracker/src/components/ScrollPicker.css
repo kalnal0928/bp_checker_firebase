@@ -8,10 +8,11 @@
   padding: 15px 10px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   border: 1px solid #e9ecef;
-  min-height: 200px;
   position: relative;
-  width: 100%;
-  flex: 1;
+  width: auto;
+  min-width: 0;
+  flex: 1 1 auto;
+  box-sizing: border-box;
 }
 
 .picker-header {
@@ -132,12 +133,18 @@
 /* 모바일 최적화 */
 @media (max-width: 768px) {
   .scroll-picker-container {
-    padding: 15px 10px;
-    min-height: 280px;
+    padding: 12px 8px;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    flex: 1 1 auto;
+    box-sizing: border-box;
   }
   
   .picker-item {
     font-size: 1.6rem;
+    min-height: 45px;
+    height: auto;
   }
   
   .picker-item.selected {
@@ -146,12 +153,21 @@
   
   .picker-selection-indicator {
     height: 45px;
+    width: 90%;
   }
   
   .scroll-picker {
     /* 모바일에서 더 부드러운 스크롤 */
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .scroll-picker-wrapper {
+    min-width: 0;
+    width: 100%;
+    max-width: none;
   }
 }
 
