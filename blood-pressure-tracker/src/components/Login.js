@@ -19,6 +19,11 @@ const Login = ({ user, setUser }) => {
       setError('이름, 이메일, 비밀번호를 모두 입력해주세요.');
       return;
     }
+    const emailRegex = /\S+@\S+\.\S+/;
+    if (!emailRegex.test(email)) {
+      setError('올바른 이메일 형식이 아닙니다.');
+      return;
+    }
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(userCredential.user, { displayName: name });
