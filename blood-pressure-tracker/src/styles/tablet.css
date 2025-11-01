@@ -43,3 +43,20 @@
   outline: none;
   transition: all 0.3s ease;
 }
+
+.year-selector {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.year-selector input[type="number"] {
+  border: 2px solid #ecf0f1;
+  padding: 10px 15px;
+  border-radius: 12px;
+  font-size: 1rem;
+  background: #fff;
+  color: #333;
+  outline: none;
+  transition: all 0.3s ease;
+}

@@ -23,6 +23,7 @@ function App() {
   const [activeTab, setActiveTab] = useState('add');
   const [timeRange, setTimeRange] = useState('week'); // 'week', 'month', 'quarter', 'year'
   const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7)); // YYYY-MM
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()); // YYYY
 
   const formatTimestamp = (timestamp) => {
     if (timestamp && typeof timestamp.toDate === 'function') {
@@ -262,6 +263,10 @@ function App() {
       const startDate = new Date(year, month - 1, 1);
       const endDate = new Date(year, month, 0);
       return recordDate >= startDate && recordDate <= endDate;
+    } else if (timeRange === 'year') {
+      const startDate = new Date(selectedYear, 0, 1);
+      const endDate = new Date(selectedYear, 11, 31, 23, 59, 59);
+      return recordDate >= startDate && recordDate <= endDate;
     }
 
     let startDate = new Date();
@@ -271,8 +276,6 @@ function App() {
       startDate.setDate(now.getDate() - 30);
     } else if (timeRange === 'quarter') {
       startDate.setMonth(now.getMonth() - 3);
-    } else if (timeRange === 'year') {
-      startDate.setFullYear(now.getFullYear() - 1);
     }
 
     return recordDate >= startDate && recordDate <= now;
@@ -506,6 +509,17 @@ function App() {
                 </div>
               )}
               <BloodPressureStats data={filteredBloodPressure} />
+              {timeRange === 'year' && (
+                <div className="year-selector">
+                  <input 
+                    type="number" 
+                    value={selectedYear} 
+                    onChange={(e) => setSelectedYear(Number(e.target.value))} 
+                    min="1900" 
+                    max="2100" 
+                  />
+                </div>
+              )}
             </section>
           )}
 
@@ -528,6 +542,17 @@ function App() {
                 </div>
               )}
               <BloodPressureChart data={filteredBloodPressure} />
+              {timeRange === 'year' && (
+                <div className="year-selector">
+                  <input 
+                    type="number" 
+                    value={selectedYear} 
+                    onChange={(e) => setSelectedYear(Number(e.target.value))} 
+                    min="1900" 
+                    max="2100" 
+                  />
+                </div>
+              )}
             </section>
           )}
 
