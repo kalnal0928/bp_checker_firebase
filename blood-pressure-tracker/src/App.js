@@ -135,6 +135,11 @@ function App() {
       setSuccess(null);
       
       const newTimestamp = new Date(`${recordDate}T${recordTime}`);
+      await addDoc(collection(db, 'blood_pressure'), {
+        '수축기': systolic,
+        '이완기': diastolic,
+        '맥박': pulse,
+        '측정시간': newTimestamp,
         'uid': user.uid,
         '이름': user.displayName,
       });
