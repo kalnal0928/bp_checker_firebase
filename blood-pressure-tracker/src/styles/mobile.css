@@ -164,6 +164,31 @@ section {
   justify-content: center;
   margin-bottom: 20px;
   flex-wrap: wrap;
+  /* Specific migrate button override to handle stubborn browser styles (Samsung) */
+  @media (max-width: 768px) {
+    .btn-migrate {
+      position: relative !important;
+      display: inline-block !important;
+      width: 100% !important;
+      height: auto !important;
+      padding: 12px 14px !important;
+      transform: none !important;
+      writing-mode: horizontal-tb !important;
+      text-orientation: mixed !important;
+      white-space: normal !important;
+      line-height: 1.2 !important;
+      text-align: center !important;
+      border-radius: 8px !important;
+      -webkit-transform: none !important;
+      -webkit-writing-mode: horizontal-tb !important;
+      -webkit-text-orientation: mixed !important;
+      box-shadow: none !important;
+      margin: 0 !important;
+      right: auto !important;
+      top: auto !important;
+      z-index: 3 !important;
+    }
+  }
 }
 
 .time-range-selector button {

@@ -356,14 +356,14 @@ function App() {
               로그아웃
             </button>
           </div>
-          <div className="migration-section">
+            <div className="migration-section">
             <input 
               type="text" 
               placeholder="이전 사용자 이름 입력"
               value={migrationName}
               onChange={(e) => setMigrationName(e.target.value)}
             />
-            <button onClick={handleMigrate}>데이터 마이그레이션</button>
+            <button className="btn-migrate" onClick={handleMigrate}>데이터 마이그레이션</button>
           </div>
         </div>
       </header>
