@@ -219,3 +219,26 @@ section {
   width: 100%;
   max-width: 200px;
 }
+
+.quarter-selector {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.quarter-selector button {
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 0.9rem;
+  margin: 2px;
+}
+
+.quarter-selector button.active {
+  background: #3498db;
+  color: white;
+  border-color: #3498db;
+}

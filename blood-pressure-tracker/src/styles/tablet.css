@@ -60,3 +60,23 @@
   outline: none;
   transition: all 0.3s ease;
 }
+
+.quarter-selector {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.quarter-selector button {
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.quarter-selector button.active {
+  background: #3498db;
+  color: white;
+  border-color: #3498db;
+}

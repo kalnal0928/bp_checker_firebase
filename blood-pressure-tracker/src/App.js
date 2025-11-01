@@ -24,6 +24,7 @@ function App() {
   const [timeRange, setTimeRange] = useState('week'); // 'week', 'month', 'quarter', 'year'
   const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7)); // YYYY-MM
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()); // YYYY
+  const [selectedQuarter, setSelectedQuarter] = useState(Math.floor(new Date().getMonth() / 3) + 1); // 1, 2, 3, or 4
 
   const formatTimestamp = (timestamp) => {
     if (timestamp && typeof timestamp.toDate === 'function') {
@@ -262,6 +263,11 @@ function App() {
       const [year, month] = selectedMonth.split('-').map(Number);
       const startDate = new Date(year, month - 1, 1);
       const endDate = new Date(year, month, 0);
+      return recordDate >= startDate && recordDate <= endDate;
+    } else if (timeRange === 'quarter') {
+      const startMonth = (selectedQuarter - 1) * 3;
+      const startDate = new Date(selectedYear, startMonth, 1);
+      const endDate = new Date(selectedYear, startMonth + 3, 0, 23, 59, 59);
       return recordDate >= startDate && recordDate <= endDate;
     } else if (timeRange === 'year') {
       const startDate = new Date(selectedYear, 0, 1);
@@ -508,6 +514,14 @@ function App() {
                   <input type="month" value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)} />
                 </div>
               )}
+              {timeRange === 'quarter' && (
+                <div className="quarter-selector">
+                  <button onClick={() => setSelectedQuarter(1)} className={selectedQuarter === 1 ? 'active' : ''}>1분기</button>
+                  <button onClick={() => setSelectedQuarter(2)} className={selectedQuarter === 2 ? 'active' : ''}>2분기</button>
+                  <button onClick={() => setSelectedQuarter(3)} className={selectedQuarter === 3 ? 'active' : ''}>3분기</button>
+                  <button onClick={() => setSelectedQuarter(4)} className={selectedQuarter === 4 ? 'active' : ''}>4분기</button>
+                </div>
+              )}
               <BloodPressureStats data={filteredBloodPressure} />
               {timeRange === 'year' && (
                 <div className="year-selector">
@@ -539,6 +553,14 @@ function App() {
               {timeRange === 'month' && (
                 <div className="month-selector">
                   <input type="month" value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)} />
+                </div>
+              )}
+              {timeRange === 'quarter' && (
+                <div className="quarter-selector">
+                  <button onClick={() => setSelectedQuarter(1)} className={selectedQuarter === 1 ? 'active' : ''}>1분기</button>
+                  <button onClick={() => setSelectedQuarter(2)} className={selectedQuarter === 2 ? 'active' : ''}>2분기</button>
+                  <button onClick={() => setSelectedQuarter(3)} className={selectedQuarter === 3 ? 'active' : ''}>3분기</button>
+                  <button onClick={() => setSelectedQuarter(4)} className={selectedQuarter === 4 ? 'active' : ''}>4분기</button>
                 </div>
               )}
               <BloodPressureChart data={filteredBloodPressure} />
