@@ -3,21 +3,25 @@ import { auth } from '../firebase';
 import { 
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword, 
-  signOut 
+  signOut, 
+  updateProfile
 } from "firebase/auth";
 
 const Login = ({ user, setUser }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [isSignUp, setIsSignUp] = useState(false);
   const [error, setError] = useState(null);
 
   const handleSignUp = async () => {
-    if (!email || !password) {
-      setError('이메일과 비밀번호를 모두 입력해주세요.');
+    if (!email || !password || !name) {
+      setError('이름, 이메일, 비밀번호를 모두 입력해주세요.');
       return;
     }
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      await updateProfile(userCredential.user, { displayName: name });
       setUser(auth.currentUser);
     } catch (err) {
       setError(err.message);
@@ -50,11 +54,20 @@ const Login = ({ user, setUser }) => {
     <div className="login-container">
       {user ? (
         <div>
-          <p>Welcome, {user.email}</p>
+          <p>Welcome, {user.displayName || user.email}</p>
           <button onClick={handleLogout}>Logout</button>
         </div>
       ) : (
         <div>
+          <h2>{isSignUp ? '회원가입' : '로그인'}</h2>
+          {isSignUp && (
+            <input
+              type="text"
+              placeholder="이름"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          )}
           <input 
             type="email" 
             placeholder="Email" 
@@ -67,8 +80,14 @@ const Login = ({ user, setUser }) => {
             value={password} 
             onChange={(e) => setPassword(e.target.value)} 
           />
-          <button onClick={handleLogin}>Login</button>
-          <button onClick={handleSignUp}>Sign Up</button>
+          {isSignUp ? (
+            <button onClick={handleSignUp}>회원가입</button>
+          ) : (
+            <button onClick={handleLogin}>로그인</button>
+          )}
+          <button onClick={() => setIsSignUp(!isSignUp)}>
+            {isSignUp ? '이미 계정이 있으신가요? 로그인' : '계정이 없으신가요? 회원가입'}
+          </button>
           {error && <p>{error}</p>}
         </div>
       )}

@@ -135,12 +135,8 @@ function App() {
       setSuccess(null);
       
       const newTimestamp = new Date(`${recordDate}T${recordTime}`);
-      await addDoc(collection(db, 'blood_pressure'), {
-        '수축기': systolic,
-        '이완기': diastolic,
-        '맥박': pulse,
-        '측정시간': newTimestamp,
         'uid': user.uid,
+        '이름': user.displayName,
       });
       
       setSystolic(130);
@@ -193,6 +189,7 @@ function App() {
         '맥박': pulse,
         '측정시간': newTimestamp,
         'uid': user.uid,
+        '이름': user.displayName,
       });
 
       setEditingId(null);
@@ -349,7 +346,7 @@ function App() {
         <div className="user-section">
           <div className="current-user">
             <span className="user-icon">👤</span>
-            <span className="user-name">{user.email}</span>
+            <span className="user-name">{user.displayName || user.email}</span>
             <button className="btn-change-user" onClick={handleLogout}>
               로그아웃
             </button>
