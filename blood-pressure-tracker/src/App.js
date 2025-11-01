@@ -420,35 +420,152 @@ function App() {
         )}
 
         {/* Tab Navigation */}
-        <nav className="tab-navigation">
-          <button 
+        <nav className="tab-navigation" style={{
+          display: 'flex',
+          justifyContent: 'space-around',
+          alignItems: 'center',
+          width: '100%',
+          padding: '10px 5px',
+          backgroundColor: 'white',
+          borderRadius: '12px',
+          gap: '5px'
+        }}>
+          <span
+            role="button"
+            tabIndex={0}
             className={`tab-button ${activeTab === 'add' ? 'active' : ''}`}
             onClick={() => setActiveTab('add')}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveTab('add'); } }}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '10px 8px',
+              cursor: 'pointer',
+              flex: '1',
+              minWidth: '80px',
+              maxWidth: '120px',
+              backgroundColor: activeTab === 'add' ? '#f0f0f0' : 'transparent',
+              border: 'none',
+              borderRadius: '8px',
+              transform: 'none',
+              writingMode: 'horizontal-tb',
+              WebkitWritingMode: 'horizontal-tb'
+            }}
           >
-            <span className="tab-icon">📝</span>
-            <span className="tab-text">기록 추가</span>
-          </button>
-          <button 
+            <span className="tab-icon" style={{fontSize: '1.5rem'}}>📝</span>
+            <span className="tab-text" style={{
+              fontSize: '0.85rem',
+              marginTop: '4px',
+              textAlign: 'center',
+              whiteSpace: 'normal',
+              wordBreak: 'keep-all',
+              lineHeight: '1.2'
+            }}>기록 추가</span>
+          </span>
+          <span
+            role="button"
+            tabIndex={0}
             className={`tab-button ${activeTab === 'records' ? 'active' : ''}`}
             onClick={() => setActiveTab('records')}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveTab('records'); } }}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '10px 8px',
+              cursor: 'pointer',
+              flex: '1',
+              minWidth: '80px',
+              maxWidth: '120px',
+              backgroundColor: activeTab === 'records' ? '#f0f0f0' : 'transparent',
+              border: 'none',
+              borderRadius: '8px',
+              transform: 'none',
+              writingMode: 'horizontal-tb',
+              WebkitWritingMode: 'horizontal-tb'
+            }}
           >
-            <span className="tab-icon">📋</span>
-            <span className="tab-text">기록 목록</span>
-          </button>
-          <button 
+            <span className="tab-icon" style={{fontSize: '1.5rem'}}>📋</span>
+            <span className="tab-text" style={{
+              fontSize: '0.85rem',
+              marginTop: '4px',
+              textAlign: 'center',
+              whiteSpace: 'normal',
+              wordBreak: 'keep-all',
+              lineHeight: '1.2'
+            }}>기록 목록</span>
+          </span>
+          <span
+            role="button"
+            tabIndex={0}
             className={`tab-button ${activeTab === 'stats' ? 'active' : ''}`}
             onClick={() => setActiveTab('stats')}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveTab('stats'); } }}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '10px 8px',
+              cursor: 'pointer',
+              flex: '1',
+              minWidth: '80px',
+              maxWidth: '120px',
+              backgroundColor: activeTab === 'stats' ? '#f0f0f0' : 'transparent',
+              border: 'none',
+              borderRadius: '8px',
+              transform: 'none',
+              writingMode: 'horizontal-tb',
+              WebkitWritingMode: 'horizontal-tb'
+            }}
           >
-            <span className="tab-icon">📊</span>
-            <span className="tab-text">건강 통계</span>
-          </button>
-          <button 
+            <span className="tab-icon" style={{fontSize: '1.5rem'}}>📊</span>
+            <span className="tab-text" style={{
+              fontSize: '0.85rem',
+              marginTop: '4px',
+              textAlign: 'center',
+              whiteSpace: 'normal',
+              wordBreak: 'keep-all',
+              lineHeight: '1.2'
+            }}>건강 통계</span>
+          </span>
+          <span
+            role="button"
+            tabIndex={0}
             className={`tab-button ${activeTab === 'chart' ? 'active' : ''}`}
             onClick={() => setActiveTab('chart')}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveTab('chart'); } }}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '10px 8px',
+              cursor: 'pointer',
+              flex: '1',
+              minWidth: '80px',
+              maxWidth: '120px',
+              backgroundColor: activeTab === 'chart' ? '#f0f0f0' : 'transparent',
+              border: 'none',
+              borderRadius: '8px',
+              transform: 'none',
+              writingMode: 'horizontal-tb',
+              WebkitWritingMode: 'horizontal-tb'
+            }}
           >
-            <span className="tab-icon">📈</span>
-            <span className="tab-text">혈압 추이</span>
-          </button>
+            <span className="tab-icon" style={{fontSize: '1.5rem'}}>📈</span>
+            <span className="tab-text" style={{
+              fontSize: '0.85rem',
+              marginTop: '4px',
+              textAlign: 'center',
+              whiteSpace: 'normal',
+              wordBreak: 'keep-all',
+              lineHeight: '1.2'
+            }}>혈압 추이</span>
+          </span>
         </nav>
 
         {/* Tab Content */}
