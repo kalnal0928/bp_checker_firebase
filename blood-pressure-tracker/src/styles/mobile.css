@@ -56,6 +56,11 @@ section {
 .button-group {
   display: flex;
   flex-direction: row; /* 버튼들이 가로로 나란히 */
+/*
+  Force vertical stacking of the input form on small screens so that
+  the date/time inputs and the save button move below the scroll pickers.
+  This prevents horizontal scrolling and keeps a clean vertical flow.
+*/
   gap: 10px;
   flex-shrink: 0; /* 줄어들지 않도록 */
 }
@@ -98,6 +103,56 @@ section {
     flex-direction: row;
     gap: 10px;
     flex-wrap: wrap;
+  
+  .input-form {
+    display: flex !important;
+    flex-direction: column !important; /* stack vertically */
+    gap: 16px !important;
+    overflow-x: visible !important;
+    padding-bottom: 8px !important;
+  }
+
+  .scroll-pickers-container {
+    width: 100% !important;
+    padding: 12px !important;
+    box-sizing: border-box !important;
+    justify-content: center !important;
+    overflow-x: auto; /* allow only the pickers to scroll horizontally if necessary */
+  }
+
+  .input-bottom-row {
+    display: flex !important;
+    flex-direction: column !important; /* move date/time + buttons below */
+    gap: 12px !important;
+    align-items: stretch !important;
+    width: 100% !important;
+  }
+
+  .datetime-inputs {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  .datetime-inputs .input-group {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .button-group {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    width: 100% !important;
+    justify-content: center !important;
+    align-items: stretch !important;
+  }
+
+  .button-group .btn-primary,
+  .btn-primary {
+    width: 100% !important;
+  }
     justify-content: space-between;
     align-items: flex-end;
   }
