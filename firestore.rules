@@ -6,5 +6,9 @@ service cloud.firestore {
       allow read, delete: if request.auth != null && get(/databases/$(database)/documents/blood_pressure/$(document)).data.uid == request.auth.uid;
       allow update: if request.auth != null && (get(/databases/$(database)/documents/blood_pressure/$(document)).data.uid == request.auth.uid || !('uid' in get(/databases/$(database)/documents/blood_pressure/$(document)).data));
     }
+
+    match /medications/{document} {
+      allow read, write: if request.auth != null && request.resource.data.uid == request.auth.uid;
+    }
   }
 }
