@@ -39,6 +39,16 @@ section { padding: 20px; }
   .input-bottom-row { display:flex !important; flex-direction:column !important; gap:12px !important; align-items:stretch !important; width:100% !important; }
   .datetime-inputs { display:flex !important; flex-direction:column !important; gap:10px !important; width:100% !important; }
   .datetime-inputs .input-group { width:100% !important; min-width:0 !important; }
+  .datetime-inputs .input-group input { width:100% !important; min-width:200px !important; font-size:16px !important; padding:12px !important; box-sizing:border-box !important; }
+  .datetime-inputs .input-group input[type="date"], .datetime-inputs .input-group input[type="time"] { 
+    -webkit-appearance:none !important; 
+    appearance:none !important; 
+    background:white !important; 
+    border:2px solid #ecf0f1 !important; 
+    border-radius:12px !important; 
+    color:#333 !important; 
+    text-align:center !important; 
+  }
   .button-group { display:flex !important; flex-direction:column !important; gap:8px !important; width:100% !important; justify-content:center !important; align-items:stretch !important; }
   .btn-primary { width:100% !important; }
 
@@ -54,6 +64,40 @@ section { padding: 20px; }
 /* 기타 모바일 보조 스타일 */
 .tab-icon { font-size:1.5rem; }
 .tab-text { display:block; text-align:center; word-break:keep-all; line-height:1.2; font-size:0.85rem; }
+
+/* 모바일 날짜/시간 입력 필드 개선 */
+@media (max-width: 768px) {
+  .datetime-inputs .input-group label {
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+    color: #34495e !important;
+    margin-bottom: 8px !important;
+    display: block !important;
+    text-align: left !important;
+  }
+  
+  .datetime-inputs .input-group input[type="date"],
+  .datetime-inputs .input-group input[type="time"] {
+    width: 100% !important;
+    padding: 15px !important;
+    font-size: 16px !important;
+    border: 2px solid #ecf0f1 !important;
+    border-radius: 12px !important;
+    background: white !important;
+    color: #333 !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+  }
+  
+  .datetime-inputs .input-group input[type="date"]:focus,
+  .datetime-inputs .input-group input[type="time"]:focus {
+    outline: none !important;
+    border-color: #3498db !important;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1) !important;
+  }
+}
 .month-selector { display:flex; justify-content:center; margin-bottom:20px; }
 .month-selector input[type="month"] { width:100%; max-width:200px; border-radius:12px; padding:10px 15px; border:2px solid #ecf0f1; }
 .year-selector { display:flex; justify-content:center; margin-top:10px; }
