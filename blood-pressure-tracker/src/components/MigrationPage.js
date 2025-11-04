@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { collection, query, where, getDocs, writeBatch } from 'firebase/firestore';
 import { db } from '../firebase'; // Assuming firebase.js is in the parent directory
+import './MigrationPage.css';
 
 function MigrationPage({ user, setError, setSuccess, setLoading }) {
   const [migrationName, setMigrationName] = useState('');

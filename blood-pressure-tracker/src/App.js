@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db, auth } from './firebase';
-import { collection, addDoc, doc, updateDoc, deleteDoc, query, where, onSnapshot, getDocs, writeBatch } from 'firebase/firestore';
+import { collection, addDoc, doc, updateDoc, deleteDoc, query, where, onSnapshot } from 'firebase/firestore';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import BloodPressureChart from './components/BloodPressureChart';
 import BloodPressureStats from './components/BloodPressureStats';
@@ -530,6 +530,40 @@ function App() {
               lineHeight: '1.2'
             }}>복약 정보</span>
           </span>
+          <span
+            role="button"
+            tabIndex={0}
+            className={`tab-button ${activeTab === 'migration' ? 'active' : ''}`}
+            onClick={() => setActiveTab('migration')}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveTab('migration'); } }}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '10px 8px',
+              cursor: 'pointer',
+              flex: '1',
+              minWidth: '80px',
+              maxWidth: '120px',
+              backgroundColor: activeTab === 'migration' ? '#f0f0f0' : 'transparent',
+              border: 'none',
+              borderRadius: '8px',
+              transform: 'none',
+              writingMode: 'horizontal-tb',
+              WebkitWritingMode: 'horizontal-tb'
+            }}
+          >
+            <span className="tab-icon" style={{fontSize: '1.5rem'}}>🔄</span>
+            <span className="tab-text" style={{
+              fontSize: '0.85rem',
+              marginTop: '4px',
+              textAlign: 'center',
+              whiteSpace: 'normal',
+              wordBreak: 'keep-all',
+              lineHeight: '1.2'
+            }}>데이터 마이그레이션</span>
+          </span>
         </nav>
 
         {/* Tab Content */}
@@ -722,6 +756,17 @@ function App() {
                 <div className="section-icon">💊</div>
               </div>
               <MedicationPage user={user} />
+            </section>
+          )}
+
+          {activeTab === 'migration' && (
+            <section className="migration-section-page">
+              <MigrationPage 
+                user={user} 
+                setError={setError} 
+                setSuccess={setSuccess} 
+                setLoading={setLoading} 
+              />
             </section>
           )}
 

@@ -49,9 +49,6 @@ section { padding: 20px; }
 
   .tab-button, .tab-button[role="button"] { display:flex !important; flex-direction:column !important; align-items:center !important; justify-content:center !important; padding:10px 8px !important; min-width:80px !important; max-width:120px !important; background:none !important; border:none !important; }
 
-  .migration-wrap { width:100% !important; display:flex !important; justify-content:center !important; }
-  .migration-section { width:100% !important; max-width:520px !important; padding:10px !important; box-sizing:border-box !important; }
-  .btn-migrate, .btn-migrate[role="button"] { display:block !important; width:100% !important; padding:12px !important; margin:10px 0 !important; text-align:center !important; background:#f39c12 !important; color:#fff !important; border-radius:8px !important; -webkit-appearance:none !important; appearance:none !important; box-shadow:none !important; }
 }
 
 /* 기타 모바일 보조 스타일 */
@@ -242,70 +239,4 @@ section { padding: 20px; }
 
 }
 
-/**
- * 모바일 환경의 브라우저 호환성 문제 해결을 위한 스타일
- * - Samsung Browser: 세로 모드에서 버튼이 회전되는 문제 해결
- * - 기타 모바일 브라우저: 레이아웃 안정성 확보
- */
-@media (max-width: 768px) {
-  /* 마이그레이션 버튼 컨테이너 */
-  .migration-wrap {
-    width: 100% !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: stretch !important;
-  }
-
-  /* 마이그레이션 섹션 레이아웃 */
-  .migration-section {
-    width: 100% !important;
-    max-width: 520px !important;
-    position: static !important;
-    padding: 10px !important;
-    margin: 0 !important;
-    transform: none !important;
-  }
-
-  /* 마이그레이션 버튼 - Samsung Browser 세로 모드 대응 */
-  .btn-migrate,
-  .btn-migrate[role="button"] {
-    /* 레이아웃 */
-    display: block !important;
-    width: 100% !important;
-    height: auto !important;
-    padding: 12px !important;
-    margin: 10px 0 !important;
-    box-sizing: border-box !important;
-    
-    /* 텍스트 정렬 */
-    text-align: center !important;
-    line-height: 1.2 !important;
-    white-space: normal !important;
-
-    /* 회전/변형 방지 */
-    position: static !important;
-    transform: none !important;
-    -webkit-transform: none !important;
-    transform-origin: center !important;
-
-    /* 텍스트 방향 강제 */
-    writing-mode: horizontal-tb !important;
-    -webkit-writing-mode: horizontal-tb !important;
-    text-orientation: mixed !important;
-    -webkit-text-orientation: mixed !important;
-
-    /* 스타일 */
-    background: #f39c12 !important;
-    color: white !important;
-    border-radius: 8px !important;
-    cursor: pointer !important;
-    z-index: 10 !important;
-
-    /* 브라우저 기본 스타일 제거 */
-    -webkit-appearance: none !important;
-    appearance: none !important;
-    box-shadow: none !important;
-    border: none !important;
-  }
-}
 }
