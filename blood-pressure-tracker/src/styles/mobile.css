@@ -125,7 +125,42 @@ section { padding: 20px; }
   }
   
   .tab-button.active {
-    background-color: #f0f0f0 !important;
+    background: linear-gradient(135deg, #3498db, #2980b9) !important;
+    color: white !important;
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3) !important;
+  }
+  
+  .tab-button.active .tab-text {
+    color: white !important;
+  }
+  
+  .tab-button.active .tab-icon {
+    color: white !important;
+  }
+  
+  .tab-button:not(.active) {
+    color: #34495e !important;
+  }
+  
+  .tab-button:not(.active) .tab-text {
+    color: #34495e !important;
+  }
+  
+  .tab-button:not(.active) .tab-icon {
+    color: #34495e !important;
+  }
+  
+  .tab-button:not(.active):hover {
+    background-color: rgba(52, 152, 219, 0.1) !important;
+    color: #2980b9 !important;
+  }
+  
+  .tab-button:not(.active):hover .tab-text {
+    color: #2980b9 !important;
+  }
+  
+  .tab-button:not(.active):hover .tab-icon {
+    color: #2980b9 !important;
   }
   
   .tab-text {
