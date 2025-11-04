@@ -10,6 +10,7 @@ const MedicationPage = ({ user }) => {
 
   useEffect(() => {
     if (!user) return;
+    console.log('MedicationPage user:', user);
 
     const q = query(collection(db, 'medications'), where('uid', '==', user.uid));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -17,6 +18,7 @@ const MedicationPage = ({ user }) => {
       querySnapshot.forEach((doc) => {
         meds.push({ id: doc.id, ...doc.data() });
       });
+      console.log('Fetched medications:', meds);
       setMedications(meds);
     });
 

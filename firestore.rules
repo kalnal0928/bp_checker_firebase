@@ -3,7 +3,8 @@ service cloud.firestore {
   match /databases/{database}/documents {
     match /blood_pressure/{document} {
       allow create: if request.auth != null && request.resource.data.uid == request.auth.uid;
-      allow read, delete: if request.auth != null && get(/databases/$(database)/documents/blood_pressure/$(document)).data.uid == request.auth.uid;
+      allow get, delete: if request.auth != null && get(/databases/$(database)/documents/blood_pressure/$(document)).data.uid == request.auth.uid;
+      allow list: if request.auth != null;
       allow update: if request.auth != null && (get(/databases/$(database)/documents/blood_pressure/$(document)).data.uid == request.auth.uid || !('uid' in get(/databases/$(database)/documents/blood_pressure/$(document)).data));
     }
 
