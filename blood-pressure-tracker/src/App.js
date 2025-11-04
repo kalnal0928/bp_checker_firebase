@@ -6,6 +6,7 @@ import BloodPressureChart from './components/BloodPressureChart';
 import BloodPressureStats from './components/BloodPressureStats';
 import ScrollPicker from './components/ScrollPicker';
 import Login from './components/Login';
+import MedicationPage from './components/MedicationPage';
 import './App.css';
 
 function App() {
@@ -566,6 +567,40 @@ function App() {
               lineHeight: '1.2'
             }}>혈압 추이</span>
           </span>
+          <span
+            role="button"
+            tabIndex={0}
+            className={`tab-button ${activeTab === 'medication' ? 'active' : ''}`}
+            onClick={() => setActiveTab('medication')}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveTab('medication'); } }}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '10px 8px',
+              cursor: 'pointer',
+              flex: '1',
+              minWidth: '80px',
+              maxWidth: '120px',
+              backgroundColor: activeTab === 'medication' ? '#f0f0f0' : 'transparent',
+              border: 'none',
+              borderRadius: '8px',
+              transform: 'none',
+              writingMode: 'horizontal-tb',
+              WebkitWritingMode: 'horizontal-tb'
+            }}
+          >
+            <span className="tab-icon" style={{fontSize: '1.5rem'}}>💊</span>
+            <span className="tab-text" style={{
+              fontSize: '0.85rem',
+              marginTop: '4px',
+              textAlign: 'center',
+              whiteSpace: 'normal',
+              wordBreak: 'keep-all',
+              lineHeight: '1.2'
+            }}>복약 정보</span>
+          </span>
         </nav>
 
         {/* Tab Content */}
@@ -748,6 +783,16 @@ function App() {
                   />
                 </div>
               )}
+            </section>
+          )}
+
+          {activeTab === 'medication' && (
+            <section className="medication-section">
+              <div className="section-header">
+                <h2>복약 정보</h2>
+                <div className="section-icon">💊</div>
+              </div>
+              <MedicationPage user={user} />
             </section>
           )}
 

@@ -1,0 +1,45 @@
+.medication-page {
+  padding: 20px;
+}
+
+.medication-form .input-group {
+  margin-bottom: 15px;
+}
+
+.medication-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.medication-form input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.medication-form .btn-save {
+  padding: 10px 15px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.medication-form .btn-save:hover {
+  background-color: #0056b3;
+}
+
+.medication-list {
+  margin-top: 20px;
+}
+
+.medication-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
