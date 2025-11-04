@@ -218,6 +218,7 @@ section { padding: 20px; }
     text-align: center !important;
     align-self: stretch !important;
   }
+}
 /* Very small screens - ensure header layout stacks vertically */
 @media (max-width: 480px) {
   .app-header {
