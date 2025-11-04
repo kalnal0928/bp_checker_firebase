@@ -1,145 +1,147 @@
-/* 태블릿 최적화 */
-.scroll-pickers-container {
-  gap: 10px;
-}
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  /* 태블릿 최적화 */
+  .scroll-pickers-container {
+    gap: 10px;
+  }
 
-.datetime-inputs {
-  gap: 15px;
-}
+  .datetime-inputs {
+    gap: 15px;
+  }
 
-.time-range-selector {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
+  .time-range-selector {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
 
-.time-range-selector button {
-  background: #f0f0f0;
-  border: 1px solid #ccc;
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
+  .time-range-selector button {
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
 
-.time-range-selector button.active {
-  background: #3498db;
-  color: white;
-  border-color: #3498db;
-}
+  .time-range-selector button.active {
+    background: #3498db;
+    color: white;
+    border-color: #3498db;
+  }
 
-.month-selector {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
+  .month-selector {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
 
-.month-selector input[type="month"] {
-  border: 2px solid #ecf0f1;
-  padding: 10px 15px;
-  border-radius: 12px;
-  font-size: 1rem;
-  background: #fff;
-  color: #333;
-  outline: none;
-  transition: all 0.3s ease;
-}
+  .month-selector input[type="month"] {
+    border: 2px solid #ecf0f1;
+    padding: 10px 15px;
+    border-radius: 12px;
+    font-size: 1rem;
+    background: #fff;
+    color: #333;
+    outline: none;
+    transition: all 0.3s ease;
+  }
 
-.year-selector {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-}
+  .year-selector {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
 
-.year-selector input[type="number"] {
-  border: 2px solid #ecf0f1;
-  padding: 10px 15px;
-  border-radius: 12px;
-  font-size: 1rem;
-  background: #fff;
-  color: #333;
-  outline: none;
-  transition: all 0.3s ease;
-}
+  .year-selector input[type="number"] {
+    border: 2px solid #ecf0f1;
+    padding: 10px 15px;
+    border-radius: 12px;
+    font-size: 1rem;
+    background: #fff;
+    color: #333;
+    outline: none;
+    transition: all 0.3s ease;
+  }
 
-.quarter-selector {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
+  .quarter-selector {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
 
-.quarter-selector button {
-  background: #f0f0f0;
-  border: 1px solid #ccc;
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
+  .quarter-selector button {
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
 
-.quarter-selector button.active {
-  background: #3498db;
-  color: white;
-  border-color: #3498db;
-}
+  .quarter-selector button.active {
+    background: #3498db;
+    color: white;
+    border-color: #3498db;
+  }
 
-.login-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  margin: 20px auto;
-  max-width: 400px;
-}
+  .login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 400px;
+  }
 
-.login-container input {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
+  .login-container input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
 
-.login-container button {
-  width: 100%;
-  padding: 12px;
-  background: #3498db;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-top: 10px;
-}
+  .login-container button {
+    width: 100%;
+    padding: 12px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
 
-.login-container button:hover {
-  background: #2980b9;
-}
+  .login-container button:hover {
+    background: #2980b9;
+  }
 
-.migration-section {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 10px;
-}
+  .migration-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+  }
 
-.migration-section input {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-right: 10px;
-}
+  .migration-section input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;
+  }
 
-.migration-section button {
-  padding: 8px 12px;
-  background: #f39c12;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
+  .migration-section button {
+    padding: 8px 12px;
+    background: #f39c12;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
 
-.migration-section button:hover {
-  background: #e67e22;
+  .migration-section button:hover {
+    background: #e67e22;
+  }
 }

@@ -1,9 +1,3 @@
 @import './styles/pc.css';
-
-@media screen and (min-width: 769px) and (max-width: 1024px) {
-  @import './styles/tablet.css';
-}
-
-@media screen and (max-width: 768px) {
-  @import './styles/mobile.css';
-}
+@import './styles/tablet.css';
+@import './styles/mobile.css';

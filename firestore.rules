@@ -9,7 +9,9 @@ service cloud.firestore {
     }
 
     match /medications/{document} {
-      allow read, write: if request.auth != null && request.resource.data.uid == request.auth.uid;
+      allow get, delete: if request.auth != null && get(/databases/$(database)/documents/medications/$(document)).data.uid == request.auth.uid;
+      allow list: if request.auth != null;
+      allow create, update: if request.auth != null && request.resource.data.uid == request.auth.uid;
     }
   }
 }
