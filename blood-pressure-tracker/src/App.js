@@ -7,6 +7,7 @@ import BloodPressureStats from './components/BloodPressureStats';
 import ScrollPicker from './components/ScrollPicker';
 import Login from './components/Login';
 import MedicationPage from './components/MedicationPage';
+import MigrationPage from './components/MigrationPage';
 import './App.css';
 
 function App() {
@@ -27,7 +28,6 @@ function App() {
   const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7)); // YYYY-MM
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()); // YYYY
   const [selectedQuarter, setSelectedQuarter] = useState(Math.floor(new Date().getMonth() / 3) + 1); // 1, 2, 3, or 4
-  const [migrationName, setMigrationName] = useState('');
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -257,35 +257,6 @@ function App() {
     }
   };
 
-  const handleMigrate = async () => {
-    if (!migrationName) {
-      setError('이전 사용자 이름을 입력해주세요.');
-      return;
-    }
-
-    try {
-      setLoading(true);
-      setError(null);
-
-      const q = query(collection(db, 'blood_pressure'), where("이름", "==", migrationName));
-      const querySnapshot = await getDocs(q);
-
-      const batch = writeBatch(db);
-      querySnapshot.forEach((doc) => {
-        batch.update(doc.ref, { uid: user.uid });
-      });
-      await batch.commit();
-
-      setSuccess('데이터 마이그레이션이 완료되었습니다.');
-      setMigrationName('');
-
-    } catch (err) {
-      console.error('데이터 마이그레이션 오류:', err);
-      setError('데이터 마이그레이션 중 오류가 발생했습니다.');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const filteredBloodPressure = bloodPressure.filter(bp => {
     const recordDate = bp.측정시간.toDate ? bp.측정시간.toDate() : new Date(bp.측정시간);
@@ -356,48 +327,6 @@ function App() {
             <button className="btn-change-user" onClick={handleLogout}>
               로그아웃
             </button>
-          </div>
-          <div className="migration-wrap" style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
-            <div className="migration-section" style={{width: '100%', maxWidth: '520px'}}>
-              <input
-                type="text"
-                placeholder="이전 사용자 이름 입력"
-                value={migrationName}
-                onChange={(e) => setMigrationName(e.target.value)}
-                style={{
-                  width: '100%',
-                  boxSizing: 'border-box',
-                  padding: '10px',
-                  borderRadius: '8px',
-                  border: '1px solid #ccc'
-                }}
-              />
-              <span
-                role="button"
-                tabIndex={0}
-                className="btn-migrate"
-                onClick={handleMigrate}
-                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleMigrate(); } }}
-                style={{
-                  display: 'block',
-                  width: '100%',
-                  padding: '12px',
-                  marginTop: '10px',
-                  background: '#f39c12',
-                  color: '#fff',
-                  borderRadius: '8px',
-                  textAlign: 'center',
-                  cursor: 'pointer',
-                  transform: 'none',
-                  writingMode: 'horizontal-tb',
-                  WebkitTransform: 'none',
-                  WebkitWritingMode: 'horizontal-tb',
-                  boxSizing: 'border-box'
-                }}
-              >
-                데이터 마이그레이션
-              </span>
-            </div>
           </div>
         </div>
       </header>
