@@ -622,12 +622,32 @@ function App() {
                     
                     <div className="input-group">
                       <label htmlFor="time">측정 시간</label>
-                      <input
-                        id="time"
-                        type="time"
-                        value={recordTime}
-                        onChange={(e) => setRecordTime(e.target.value)}
-                      />
+                      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                        <input
+                          id="time"
+                          type="time"
+                          value={recordTime}
+                          onChange={(e) => setRecordTime(e.target.value)}
+                          style={{ flex: 1 }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setRecordTime(getFormattedTime(new Date()))}
+                          style={{
+                            padding: '8px 12px',
+                            fontSize: '0.8rem',
+                            backgroundColor: '#3498db',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '6px',
+                            cursor: 'pointer',
+                            whiteSpace: 'nowrap'
+                          }}
+                          title="현재 시간으로 설정"
+                        >
+                          지금
+                        </button>
+                      </div>
                     </div>
                   </div>
                   
